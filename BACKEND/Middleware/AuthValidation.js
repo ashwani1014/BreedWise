@@ -28,7 +28,7 @@ export const LoginValidation = (req, res, next) => {
   email: z.string().email(),
   password: z.string().min(6),
 });
- const result = signupSchema.safeParse(req.body);
+ const result = loginSchema.safeParse(req.body);
   if (!result.success) {
     return res.status(400).json({
       success: false,
