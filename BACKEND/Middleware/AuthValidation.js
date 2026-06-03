@@ -1,13 +1,15 @@
 import { z } from "zod";
 
- 
 export const signupValidation = (req, res, next) => {
-  const signupSchema = z.object({
-  name: z.string(),
-  email: z.string().email(),
-  password: z.string().min(6),
+ 
+ const signupSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  email: z.string().email("Invalid email"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
 });
- const result = signupSchema.safeParse(req.body);
+
+  const result = signupSchema.safeParse(req.body);
+
   if (!result.success) {
     return res.status(400).json({
       success: false,
@@ -17,8 +19,6 @@ export const signupValidation = (req, res, next) => {
 
   next();
 };
-
-
 
 //Login Validation 
 

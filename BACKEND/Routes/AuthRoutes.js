@@ -8,7 +8,7 @@ import { signupValidation } from "../Middleware/AuthValidation.js";
 
 const router=express.Router();
 
-router.get("/login",LoginValidation,getUsers);
+router.get("/login",LoginValidation,);
 router.post("/signup",signupValidation,signup);
 
 
