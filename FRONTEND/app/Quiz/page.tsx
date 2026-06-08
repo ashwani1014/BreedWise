@@ -8,9 +8,9 @@ export default function QuizPage() {
       <nav className="bg-surface/80 dark:bg-surface-container-highest/80 backdrop-blur-md fixed top-0 w-full z-50 shadow-sm dark:shadow-none">
         <div className="flex justify-between items-center h-20 px-gutter max-w-container-max mx-auto">
           {/* Brand */}
-          <div className="flex items-center gap-md">
+          <div className="flex items-center gap-md  ">
             <Link
-              href="/"
+              href="/Home"
               className="font-headline-lg text-headline-lg font-bold text-primary dark:text-inverse-primary tracking-tight active:scale-95 transition-transform"
             >
               Breedwise
