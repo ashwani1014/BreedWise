@@ -10,10 +10,10 @@ export default function YourMatch() {
         const interval = setInterval(() => {
             setOpacity(0.5);
             setTimeout(() => {
-                setText(prev => 
-                    prev === "Analyzing your lifestyle..." 
-                    ? "Finding your perfect match..." 
-                    : "Analyzing your lifestyle..."
+                setText(prev =>
+                    prev === "Analyzing your lifestyle..."
+                        ? "Finding your perfect match..."
+                        : "Analyzing your lifestyle..."
                 );
                 setOpacity(1);
             }, 500);
@@ -39,7 +39,7 @@ export default function YourMatch() {
                     100% { transform: translateY(100%); }
                 }
             `}</style>
-            
+
             {/* Decorative Background Elements */}
             <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
                 <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-[#e9ddff] rounded-full mix-blend-multiply filter blur-[100px] opacity-40"></div>
@@ -48,13 +48,13 @@ export default function YourMatch() {
 
             {/* Main Content Container */}
             <main className="relative z-10 w-full max-w-lg px-[16px] md:px-[24px] flex flex-col items-center justify-center text-center">
-                
+
                 {/* Animated Loader Graphic */}
                 <div className="relative w-48 h-48 mb-[48px] flex items-center justify-center">
                     {/* Pulsing Rings */}
                     <div className="absolute inset-0 rounded-full border-2 border-[#4f378a]/20 pulse-ring"></div>
                     <div className="absolute inset-0 rounded-full border-2 border-[#4f378a]/40 pulse-ring" style={{ animationDelay: '0.5s' }}></div>
-                    
+
                     {/* Central Icon Container */}
                     <div className="relative z-10 w-32 h-32 bg-[#fdf7ff] rounded-full shadow-[0px_4px_20px_rgba(31,41,51,0.08),0px_2px_4px_rgba(31,41,51,0.04)] flex items-center justify-center overflow-hidden border border-[#cbc4d2]/30">
                         {/* Paw Icon */}
@@ -69,10 +69,10 @@ export default function YourMatch() {
                     <h1 className="text-[32px] leading-[40px] tracking-[-0.01em] font-semibold font-['Outfit'] text-[#4f378a]">
                         AI Match Processing
                     </h1>
-                    
+
                     {/* Dynamic Status Text */}
                     <div className="h-8 flex items-center justify-center">
-                        <p 
+                        <p
                             className="text-[18px] leading-[28px] font-normal font-['Inter'] text-[#494551] transition-opacity duration-500"
                             style={{ opacity }}
                         >

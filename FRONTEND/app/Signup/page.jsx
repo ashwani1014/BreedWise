@@ -120,7 +120,7 @@ export default function SignupPage() {
           <p className="text-sm text-gray-500" style={{ fontFamily: 'Inter, sans-serif' }}>
             Already have an account?{" "}
             <Link href="/Login" className="text-[#4F378A] font-semibold hover:underline ml-1">
-              Log In
+              Log In Or Sign In
             </Link>
           </p>
         }
