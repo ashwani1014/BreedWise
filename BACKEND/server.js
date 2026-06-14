@@ -4,6 +4,7 @@ import connectDB from "./config/Databaseconnection.js";
 import bodyParse from "body-parser";
 import cors from "cors"
 import router from "./Routes/AuthRoutes.js"
+import homeRoute from "./Routes/HomeRoutes.js";
 
 
 dotenv.config();
@@ -22,6 +23,7 @@ app.use(bodyParse.json());
 app.use(cors());
  
 app.use('/auth',router);
+app.use("/api/home", homeRoute);
  
 
 const PORT=process.env.Port;
