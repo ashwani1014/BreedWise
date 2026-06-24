@@ -1,124 +1,41 @@
 "use client";
-
+import { useState, useEffect } from "react";
 import Link from "next/link";
 
-const PUPPY_LISTINGS = [
-  {
-    id: 1,
-    name: "Luna",
-    breed: "French Bulldog",
-    gender: "Female",
-    age: "8 weeks",
-    price: "$2,500",
-    match: "98% Match",
-    breeder: "Ocean Breeze Frenchies",
-    rating: "4.8",
-    initials: "OB",
-    avatarBg: "bg-violet-100 text-violet-800",
-    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuBq-cNeN7EoxbudV-lAAg2CVtQgqdh6D2jLAxJjB7gWhFn7LmgMixe0KzhRghgChr08WbPENmrzHq59S1Q_Q8MtBwqfBD26ov_OyVwIWY7UKBTE_4J2BV3RjWkB7UD3fHdifCJLoNgNQ_zkuH9C4KG1odhwoaZ70f4P1BA5Ny8swp3tbgFpnr_UMmieQFdQYIj-31kk-uNDTYs5OxGL2VkNyLdgUX35VOKf3JwhBOzAqn0xpOoV0V-gzwxxI4UT-ElPFeDVjNknlm_r",
-  },
-  {
-    id: 2,
-    name: "Milo",
-    breed: "Labradoodle",
-    gender: "Male",
-    age: "10 weeks",
-    price: "$1,800",
-    match: "92% Match",
-    breeder: "Sunset Creek Doodles",
-    rating: "5.0",
-    initials: "SC",
-    avatarBg: "bg-purple-100 text-purple-800",
-    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuAPSOWGaqhvffQ7uX4xuHADq1PB0ZMlFuRL_Q1fhevw73k1bpY9xoB-c3tr7e-qKzrRk-Lc5_L8PXiFNXXbQJuIdCn93RSv1HqoCF9VHbNVwc374gwnXHYvi6U7vSfKGl-PT3DqqWr71qh9WKTRaDWYpl3Eq7PR3jpVFzbNSE-oDvqkveuvSFb0AovvpNWsYh68tAokNo1RpGo5UlMe_pamDLJDs8qy_0TTrQSfjzes5FSJFWkD5U0JcXlNDKebQ0r_KHXLY4zUey3v",
-  },
-  {
-    id: 3,
-    name: "Winston",
-    breed: "Pembroke Corgi",
-    gender: "Male",
-    age: "9 weeks",
-    price: "$2,200",
-    match: "88% Match",
-    breeder: "Royal Paws Kennel",
-    rating: "4.7",
-    initials: "RP",
-    avatarBg: "bg-amber-100 text-amber-800",
-    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuBdcfb84zyZv9hYx8xOFASxW6ZSrkKMFZyyxr6IS6_KH1qs8PBV-SVWtDXSmu01VaQPq3A2Nt18zIdlO0XUHVPzpmQbeDd9SbZvRJoekFsZoaovEgXLSJQYPk0vMutyBQrxrceawm8WcxPRMFf5gnql5e4XFId-wuNBIZJ37qpTrkTFr1izi489aW4bGzeKj609rJmTLNVWgOsRv2IaxEyAnbdQOeh8Iz_ei39QFrSFuiuUuCsLm599K6XCm3CeGXGWJRxs6nFTafii",
-  },
-  {
-    id: 4,
-    name: "Koda",
-    breed: "Siberian Husky",
-    gender: "Male",
-    age: "12 weeks",
-    price: "$1,500",
-    match: "85% Match",
-    breeder: "Northern Aurora",
-    rating: "4.9",
-    initials: "NA",
-    avatarBg: "bg-[#4f378a] text-white",
-    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuCu90OKhQZ_IhdLqYqA0dsmZEmNwMiJCg9jvxnqOrQnS2_FxPrK3-pvSx-P3OGr4VnEoeqtk0CK_zsmKD-GxvRoP9JL4AAP9gxRZk8MZbX_JBvVsLDWMNCEY2-Wc6Dm-aHa8Sfb2w2VYCfHaifQYyzLhWI3ZOKVqpjGtPP_ewHLDP3N-smaBIyZbDsJUtnJKBDSe3Gda6YTmOq88_8chTq6ryT7qJ8GyDiHtM1rzTKk86-_pCFiwIbv0ysr_MsQvriAYzuySy9X8M27",
-  },
-];
+import TopNavBar from "@/component/TopNavBar";
+
 
 export default function Home() {
+  const [puppies, setPuppies] = useState([]);
+
+  const fetchPuppies = async () => {
+    try {
+
+      const response = await fetch(
+        "http://localhost:8000/api/home"
+      );
+
+      const data = await response.json();
+
+      console.log(data);
+
+      setPuppies(data.puppies);
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchPuppies();
+  }, []);
+
   return (
+
     <div className="bg-[#fdf7ff] text-gray-900 text-base antialiased min-h-screen flex flex-col font-[Inter,sans-serif]">
 
       {/* ── TopNavBar ───────────────────────────────────────────── */}
-      <nav className="fixed top-0 w-full z-50 bg-[#fdf7ff]/80 backdrop-blur-md shadow-sm">
-        <div className="flex justify-between items-center h-20 px-6 max-w-[1280px] mx-auto">
-          {/* Logo + Nav links */}
-          <div className="flex items-center gap-12">
-            <Link
-              href="#"
-              className="text-3xl font-bold text-[#4f378a] tracking-tight font-[Outfit,sans-serif]"
-            >
-              Breedwise
-            </Link>
-            <div className="hidden md:flex items-center gap-1">
-              {["Discover", "Marketplace", "AI Match", "Resources"].map((item) => (
-                <Link
-                  key={item}
-                  href="#"
-                  className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200
-                    ${item === "Marketplace"
-                      ? "text-[#4f378a] font-semibold border-b-2 border-[#4f378a]"
-                      : "text-gray-600 hover:text-[#4f378a] hover:bg-violet-50"
-                    }`}
-                >
-                  {item}
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          {/* Right actions */}
-          <div className="flex items-center gap-4">
-            <div className="hidden md:flex items-center gap-1">
-              {["favorite", "notifications"].map((icon) => (
-                <button
-                  key={icon}
-                  className="p-1 rounded-full text-gray-500 hover:text-[#4f378a] hover:bg-violet-50 transition-all duration-200 active:scale-95"
-                >
-                  <span className="material-symbols-outlined">{icon}</span>
-                </button>
-              ))}
-            </div>
-            <div className="flex items-center gap-2">
-              <button className="hidden md:block text-sm font-medium text-gray-600 hover:text-[#4f378a] transition-colors px-3 py-2">
-                Sign In
-              </button>
-              <button className="text-sm font-medium bg-[#4f378a] text-white px-6 py-2 rounded-lg hover:bg-[#6750a4] transition-all shadow-sm active:scale-95">
-                Find a Puppy
-              </button>
-              <button className="md:hidden text-gray-500 p-1">
-                <span className="material-symbols-outlined">menu</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <TopNavBar />
 
       {/* ── Main ────────────────────────────────────────────────── */}
       <main className="flex-1 mt-20 pt-12 pb-20 px-6 max-w-[1280px] mx-auto w-full">
@@ -255,9 +172,9 @@ export default function Home() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {PUPPY_LISTINGS.map((puppy) => (
+          {puppies.map((puppy) => (
             <div
-              key={puppy.id}
+              key={puppy._id}
               className="bg-white rounded-xl shadow-[0px_4px_20px_rgba(31,41,51,0.04),0px_2px_4px_rgba(31,41,51,0.02)] overflow-hidden border border-[#cbc4d2]/20 hover:-translate-y-0.5 hover:shadow-[0px_8px_30px_rgba(31,41,51,0.08)] transition-all duration-300 flex flex-col group"
             >
               {/* Card Image */}
@@ -270,15 +187,7 @@ export default function Home() {
                 <button className="absolute top-3 right-3 p-1 bg-white/80 backdrop-blur-sm rounded-full text-gray-400 hover:text-[#4f378a] transition-colors">
                   <span className="material-symbols-outlined">favorite</span>
                 </button>
-                <div className="absolute bottom-3 left-3 bg-gradient-to-r from-[#4f378a] to-[#6750a4] text-white px-3 py-1 rounded-lg text-sm font-semibold flex items-center gap-1 shadow-sm">
-                  <span
-                    className="material-symbols-outlined"
-                    style={{ fontSize: "16px" }}
-                  >
-                    auto_awesome
-                  </span>
-                  {puppy.match}
-                </div>
+
               </div>
 
               {/* Card Body */}

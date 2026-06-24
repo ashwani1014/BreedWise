@@ -29,6 +29,6 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-  ],
+, "app/AIMatch/page.jsx", "app/Home/page.jsx", "app/Quiz/page.jsx", "app/page.jsx"  ],
   "exclude": ["node_modules"]
 }

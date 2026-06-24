@@ -1,67 +1,72 @@
-import Link from 'next/link';
+"use client";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-export default function TopNavBar() {
+export default function Navbar() {
+  const pathname = usePathname();
+
+  const navLinks = [
+    { name: "Discover", href: "/Discover" },
+    { name: "Marketplace", href: "/Home" }, // Using /Home for Marketplace since that's the available puppies page
+    { name: "AI Match", href: "/AIMatch" },
+    { name: "Resources", href: "/Resources" },
+  ];
+
   return (
-    <nav className="bg-white/90 backdrop-blur-md fixed top-0 w-full z-50 shadow-sm border-b border-gray-100">
+    <nav className="fixed top-0 w-full z-50 bg-[#fdf7ff]/80 backdrop-blur-md shadow-sm">
       <div className="flex justify-between items-center h-20 px-6 max-w-[1280px] mx-auto">
-
-        {/* Brand */}
-        <Link
-          className="text-2xl font-bold text-violet-700 hover:text-violet-800 transition-colors active:scale-95"
-          href="#"
-          style={{ fontFamily: 'Outfit, sans-serif' }}
-        >
-          Breedwise
-        </Link>
-
-        {/* Nav Links (Desktop) */}
-        <div className="hidden md:flex items-center gap-1">
-          {["Discover", "Marketplace", "Resources"].map((item) => (
-            <Link
-              key={item}
-              className="text-gray-600 hover:text-violet-700 text-sm font-medium hover:bg-violet-50 transition-all duration-200 px-3 py-2 rounded-lg"
-              href="#"
-              style={{ fontFamily: 'Inter, sans-serif' }}
-            >
-              {item}
-            </Link>
-          ))}
+        {/* Logo + Nav links */}
+        <div className="flex items-center gap-12">
           <Link
-            className="text-violet-700 font-semibold border-b-2 border-violet-700 text-sm px-3 py-2"
-            href="#"
-            style={{ fontFamily: 'Inter, sans-serif' }}
+            href="/Home"
+            className="text-3xl font-bold text-[#4f378a] tracking-tight font-[Outfit,sans-serif]"
           >
-            AI Match
+            Breedwise
           </Link>
+          <div className="hidden md:flex items-center gap-1">
+            {navLinks.map((item) => {
+              const isActive = pathname === item.href;
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200
+                    ${isActive
+                      ? "text-[#4f378a] font-semibold border-b-2 border-[#4f378a]"
+                      : "text-gray-600 hover:text-[#4f378a] hover:bg-violet-50"
+                    }`}
+                >
+                  {item.name}
+                </Link>
+              );
+            })}
+          </div>
         </div>
 
-        {/* Right Actions */}
-        <div className="flex items-center gap-2">
-          <button className="hidden sm:flex text-gray-500 hover:text-violet-700 p-2 rounded-full hover:bg-violet-50 transition-all duration-200 cursor-pointer">
-            <span className="material-symbols-outlined">favorite</span>
-          </button>
-          <button className="hidden sm:flex text-gray-500 hover:text-violet-700 p-2 rounded-full hover:bg-violet-50 transition-all duration-200 cursor-pointer">
-            <span className="material-symbols-outlined">notifications</span>
-          </button>
-          <button className="hidden md:flex text-gray-500 hover:text-violet-700 p-2 rounded-full hover:bg-violet-50 transition-all duration-200 cursor-pointer">
-            <span className="material-symbols-outlined">search</span>
-          </button>
-          <Link
-            className="hidden lg:block text-violet-700 text-sm font-medium hover:bg-violet-50 px-3 py-2 rounded-lg transition-all duration-200"
-            href="/LoginPage"
-            style={{ fontFamily: 'Inter, sans-serif' }}
-          >
-            Sign In
-          </Link>
-          <Link
-            className="bg-violet-700 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-violet-800 transition-all duration-200 shadow-sm active:scale-95"
-            href="#"
-            style={{ fontFamily: 'Inter, sans-serif' }}
-          >
-            Find a Puppy
-          </Link>
+        {/* Right actions */}
+        <div className="flex items-center gap-4">
+          <div className="hidden md:flex items-center gap-1">
+            {["favorite", "notifications"].map((icon) => (
+              <button
+                key={icon}
+                className="p-1 rounded-full text-gray-500 hover:text-[#4f378a] hover:bg-violet-50 transition-all duration-200 active:scale-95"
+              >
+                <span className="material-symbols-outlined">{icon}</span>
+              </button>
+            ))}
+          </div>
+          <div className="flex items-center gap-2">
+            <button className="hidden md:block text-sm font-medium text-gray-600 hover:text-[#4f378a] transition-colors px-3 py-2">
+              Sign In
+            </button>
+            <button className="text-sm font-medium bg-[#4f378a] text-white px-6 py-2 rounded-lg hover:bg-[#6750a4] transition-all shadow-sm active:scale-95">
+              Find a Puppy
+            </button>
+            <button className="md:hidden text-gray-500 p-1">
+              <span className="material-symbols-outlined">menu</span>
+            </button>
+          </div>
         </div>
-
       </div>
     </nav>
   );

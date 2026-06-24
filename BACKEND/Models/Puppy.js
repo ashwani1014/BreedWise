@@ -4,12 +4,13 @@ const PuppySchema = new mongoose.Schema({
   name: String,
   breed: String,
   gender: String,
-  ageWeeks: Number,
-  price: Number,
-  image: String,
-  matchScore: Number,
-  sellerName: String,
-  sellerRating: Number,
-  location: String,
+  age: String,
+  price: String,
+
+  breeder: String,
+  rating: String,
+  initials: String,
+  avatarBg: String,
+  img: String,
 });
 export const Puppy = mongoose.model("Puppy", PuppySchema);
