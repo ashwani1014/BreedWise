@@ -144,11 +144,12 @@ export default function Login() {
           <button
             type="button"
             onClick={handleGoogleLogin}
-            disabled={loading}
+            disabled={true}
+            title="Google login is currently disabled"
             className="w-full flex items-center justify-center gap-3 bg-white text-gray-700 border border-gray-200 rounded-xl py-3 px-4 hover:bg-gray-50 transition-colors focus:ring-2 focus:ring-violet-500/30 outline-none active:scale-[0.98] duration-150 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed shadow-sm"
           >
             <GoogleIcon />
-            <span className="text-sm font-medium" style={{ fontFamily: 'Inter, sans-serif' }}>Continue with Google</span>
+            <span className="text-sm font-medium" style={{ fontFamily: 'Inter, sans-serif' }}>Continue with Google (Disabled)</span>
           </button>
 
           <AuthDivider />
