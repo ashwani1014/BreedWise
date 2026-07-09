@@ -56,9 +56,9 @@ export default function Navbar() {
             ))}
           </div>
           <div className="flex items-center gap-2">
-            <button className="hidden md:block text-sm font-medium text-gray-600 hover:text-[#4f378a] transition-colors px-3 py-2">
+            <Link href="/Login" className="hidden md:block text-sm font-medium text-gray-600 hover:text-[#4f378a] transition-colors px-3 py-2">
               Sign In
-            </button>
+            </Link>
             <button className="text-sm font-medium bg-[#4f378a] text-white px-6 py-2 rounded-lg hover:bg-[#6750a4] transition-all shadow-sm active:scale-95">
               Find a Puppy
             </button>
