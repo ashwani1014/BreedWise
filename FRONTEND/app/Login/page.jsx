@@ -68,7 +68,7 @@ export default function Login() {
         localStorage.setItem("token", data.token);
         localStorage.setItem("loggedInUser", data.name);
 
-        router.push("/home");
+        router.push("/Home");
       }
 
       setSuccess(true);
