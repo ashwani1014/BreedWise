@@ -2,36 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 
-// Top Navigation Header (Shared)
-const Header = () => (
-  <header className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md shadow-sm border-b border-gray-100">
-    <div className="flex justify-between items-center h-20 px-6 max-w-7xl mx-auto">
-      <div className="text-2xl font-bold text-[#4F378A] tracking-tight">
-        Breedwise
-      </div>
-      <div className="hidden md:flex gap-8 items-center">
-        <nav className="flex gap-6">
-          <Link href="#" className="text-gray-500 hover:text-[#4F378A] transition-colors text-sm font-medium">Discover</Link>
-          <Link href="#" className="text-gray-500 hover:text-[#4F378A] transition-colors text-sm font-medium">Marketplace</Link>
-          <Link href="#" className="text-[#4F378A] font-semibold border-b-2 border-[#4F378A] pb-1 text-sm">AI Match</Link>
-          <Link href="#" className="text-gray-500 hover:text-[#4F378A] transition-colors text-sm font-medium">Resources</Link>
-        </nav>
-      </div>
-      <div className="flex items-center gap-4">
-        <span className="material-symbols-outlined text-gray-500 cursor-pointer hover:text-[#4F378A] transition-colors">favorite</span>
-        <span className="material-symbols-outlined text-gray-500 cursor-pointer hover:text-[#4F378A] transition-colors">notifications</span>
-        <div className="h-10 w-10 rounded-full overflow-hidden border-2 border-[#4F378A]/20">
-          <img
-            className="w-full h-full object-cover"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuA4hxCbczQYZaYgC_0X18ggjOEfRBMPsDTXgqRbY9rxCK0StHSlDqZnCId9KNJGZcLAO5lgvrB0si8w5E4le6turYPFSZ8PCB6HBPKVqSkQUxIM6_yl7zoBOXWUbBc6jyWDyJrP-EQpKhdd8GOE4zjoExlRTrvzSObAHZI7p8HRz3wzh8O4ikKttKxANoCtxSQO0QJ6W14vejDAidoOwwjNshIjYPjvN8LeKsOw87Qy18ToKPitbUDYrmV4YJ7393qV4Ra9-lnZSSlz"
-            alt="Profile"
-          />
-        </div>
-      </div>
-    </div>
-  </header>
-);
-
 const Step1 = ({ onNext }) => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [mounted, setMounted] = useState(false);
@@ -43,6 +13,7 @@ const Step1 = ({ onNext }) => {
 
   return (
     <>
+
       <main className="flex-grow pt-32 pb-40 px-6 flex items-center justify-center">
         <div className="max-w-4xl w-full">
           {/* Progress Header */}
@@ -126,6 +97,8 @@ const Step1 = ({ onNext }) => {
         </div>
       </main>
 
+
+
       {/* Footer */}
       <footer className="fixed bottom-0 w-full bg-white/90 backdrop-blur-md border-t border-gray-200 py-6 z-50">
         <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
@@ -150,6 +123,8 @@ const Step1 = ({ onNext }) => {
     </>
   );
 };
+
+
 
 const Step2 = ({ onPrev, onNext }) => {
   const [selectedOption, setSelectedOption] = useState(null);
@@ -352,11 +327,10 @@ const Step3 = ({ onPrev, onNext }) => {
             <button
               key={opt.id}
               onClick={() => setSelectedOption(opt.id)}
-              className={`group relative flex flex-col items-center text-center p-8 bg-white rounded-xl border transition-all duration-300 hover:-translate-y-2 hover:shadow-lg active:scale-95 focus:outline-none ${
-                selectedOption === opt.id
-                  ? 'border-[#4F378A] bg-violet-50/50 shadow-[0_0_0_3px_rgba(79,55,138,0.15)] -translate-y-1'
-                  : 'border-gray-200 hover:border-[#4F378A]/40'
-              }`}
+              className={`group relative flex flex-col items-center text-center p-8 bg-white rounded-xl border transition-all duration-300 hover:-translate-y-2 hover:shadow-lg active:scale-95 focus:outline-none ${selectedOption === opt.id
+                ? 'border-[#4F378A] bg-violet-50/50 shadow-[0_0_0_3px_rgba(79,55,138,0.15)] -translate-y-1'
+                : 'border-gray-200 hover:border-[#4F378A]/40'
+                }`}
             >
               <div className={`w-20 h-20 rounded-full flex items-center justify-center mb-6 transition-colors duration-300 ${opt.iconBg} group-hover:bg-violet-100`}>
                 <span
@@ -417,11 +391,10 @@ const Step3 = ({ onPrev, onNext }) => {
             <button
               onClick={() => onNext({ activityLevel: selectedOption })}
               disabled={!selectedOption}
-              className={`flex items-center gap-3 px-10 py-4 rounded-xl text-base font-bold shadow-md transition-all active:scale-95 group ${
-                selectedOption
-                  ? 'bg-[#4F378A] text-white hover:bg-violet-800 hover:-translate-y-0.5 hover:shadow-lg'
-                  : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-              }`}
+              className={`flex items-center gap-3 px-10 py-4 rounded-xl text-base font-bold shadow-md transition-all active:scale-95 group ${selectedOption
+                ? 'bg-[#4F378A] text-white hover:bg-violet-800 hover:-translate-y-0.5 hover:shadow-lg'
+                : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                }`}
             >
               Next Step
               <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
@@ -501,11 +474,10 @@ const Step4 = ({ onPrev, onNext }) => {
             <button
               key={opt.id}
               onClick={() => setSelectedOption(opt.id)}
-              className={`group relative flex flex-col items-center text-center p-8 bg-white rounded-xl border-2 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl active:scale-95 focus:outline-none ${
-                selectedOption === opt.id
-                  ? 'border-[#4F378A] bg-[#f2ecf4] shadow-[0px_10px_30px_rgba(79,55,138,0.1)]'
-                  : 'border-transparent shadow-[0px_4px_20px_rgba(31,41,51,0.04)] hover:shadow-[0px_10px_30px_rgba(79,55,138,0.08)]'
-              }`}
+              className={`group relative flex flex-col items-center text-center p-8 bg-white rounded-xl border-2 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl active:scale-95 focus:outline-none ${selectedOption === opt.id
+                ? 'border-[#4F378A] bg-[#f2ecf4] shadow-[0px_10px_30px_rgba(79,55,138,0.1)]'
+                : 'border-transparent shadow-[0px_4px_20px_rgba(31,41,51,0.04)] hover:shadow-[0px_10px_30px_rgba(79,55,138,0.08)]'
+                }`}
             >
               {opt.badge && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#4F378A] text-white px-4 py-1 rounded-full text-xs font-semibold shadow-md whitespace-nowrap">
@@ -557,12 +529,11 @@ const Step4 = ({ onPrev, onNext }) => {
 
           {/* Step dots */}
           <div className="hidden md:flex items-center gap-2">
-            {[1,2,3,4,5,6].map((s) => (
+            {[1, 2, 3, 4, 5, 6].map((s) => (
               <div
                 key={s}
-                className={`rounded-full transition-all ${
-                  s === 4 ? 'w-8 h-2 bg-[#4F378A]' : 'w-2 h-2 bg-gray-300'
-                }`}
+                className={`rounded-full transition-all ${s === 4 ? 'w-8 h-2 bg-[#4F378A]' : 'w-2 h-2 bg-gray-300'
+                  }`}
               />
             ))}
           </div>
@@ -570,11 +541,10 @@ const Step4 = ({ onPrev, onNext }) => {
           <button
             onClick={() => onNext({ experience: selectedOption })}
             disabled={!selectedOption}
-            className={`flex items-center gap-2 px-10 py-3 rounded-lg text-sm font-bold shadow-md transition-all active:scale-95 group ${
-              selectedOption
-                ? 'bg-[#4F378A] text-white hover:bg-violet-800 hover:-translate-y-0.5 hover:shadow-lg'
-                : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-            }`}
+            className={`flex items-center gap-2 px-10 py-3 rounded-lg text-sm font-bold shadow-md transition-all active:scale-95 group ${selectedOption
+              ? 'bg-[#4F378A] text-white hover:bg-violet-800 hover:-translate-y-0.5 hover:shadow-lg'
+              : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+              }`}
           >
             Next Step
             <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
@@ -668,30 +638,25 @@ const Step5 = ({ onPrev, onNext }) => {
               <button
                 key={pref.id}
                 onClick={() => toggleOption(pref.id)}
-                className={`group relative flex flex-col items-center justify-center p-8 rounded-xl border transition-all duration-300 active:scale-95 focus:outline-none overflow-hidden ${
-                  shakeId === pref.id ? 'animate-shake' : ''
-                } ${
-                  isSelected
+                className={`group relative flex flex-col items-center justify-center p-8 rounded-xl border transition-all duration-300 active:scale-95 focus:outline-none overflow-hidden ${shakeId === pref.id ? 'animate-shake' : ''
+                  } ${isSelected
                     ? 'ring-2 ring-[#4F378A] bg-violet-50/60 border-[#4F378A]/30 shadow-[0px_4px_20px_rgba(79,55,138,0.12)]'
                     : 'bg-white border-gray-200/60 shadow-[0px_4px_20px_rgba(31,41,51,0.04)] hover:-translate-y-0.5 hover:shadow-[0px_12px_30px_rgba(31,41,51,0.08)]'
-                }`}
+                  }`}
               >
                 <span
-                  className={`material-symbols-outlined text-4xl mb-3 transition-transform group-hover:scale-110 ${
-                    isSelected ? 'text-[#4F378A]' : 'text-[#4F378A]'
-                  }`}
+                  className={`material-symbols-outlined text-4xl mb-3 transition-transform group-hover:scale-110 ${isSelected ? 'text-[#4F378A]' : 'text-[#4F378A]'
+                    }`}
                   style={{ fontSize: '2.25rem' }}
                 >
                   {pref.icon}
                 </span>
-                <span className={`text-sm font-semibold transition-colors ${
-                  isSelected ? 'text-[#4F378A]' : 'text-gray-800'
-                }`}>
+                <span className={`text-sm font-semibold transition-colors ${isSelected ? 'text-[#4F378A]' : 'text-gray-800'
+                  }`}>
                   {pref.label}
                 </span>
-                <div className={`absolute top-3 right-3 transition-opacity ${
-                  isSelected ? 'opacity-100' : 'opacity-0'
-                }`}>
+                <div className={`absolute top-3 right-3 transition-opacity ${isSelected ? 'opacity-100' : 'opacity-0'
+                  }`}>
                   <span className="material-symbols-outlined text-[#4F378A]" style={{ fontVariationSettings: "'FILL' 1", fontSize: '1.1rem' }}>check_circle</span>
                 </div>
               </button>
@@ -701,20 +666,17 @@ const Step5 = ({ onPrev, onNext }) => {
 
         {/* Info Tip */}
         <div className={`transform transition-all duration-700 delay-200 ease-out ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
-          <div className={`p-6 rounded-xl border flex gap-4 items-start transition-all duration-300 ${
-            showLimitError
-              ? 'bg-red-50 border-red-300 ring-2 ring-red-400'
-              : 'bg-violet-50/40 border-violet-100'
-          }`}>
-            <span className={`material-symbols-outlined ${
-              showLimitError ? 'text-red-500' : 'text-[#4F378A]'
+          <div className={`p-6 rounded-xl border flex gap-4 items-start transition-all duration-300 ${showLimitError
+            ? 'bg-red-50 border-red-300 ring-2 ring-red-400'
+            : 'bg-violet-50/40 border-violet-100'
             }`}>
+            <span className={`material-symbols-outlined ${showLimitError ? 'text-red-500' : 'text-[#4F378A]'
+              }`}>
               {showLimitError ? 'warning' : 'info'}
             </span>
             <div>
-              <h4 className={`text-sm font-semibold ${
-                showLimitError ? 'text-red-600' : 'text-[#4F378A]'
-              }`}>
+              <h4 className={`text-sm font-semibold ${showLimitError ? 'text-red-600' : 'text-[#4F378A]'
+                }`}>
                 {showLimitError ? 'Maximum 3 selections reached' : 'Why this matters'}
               </h4>
               <p className="text-gray-500 text-base mt-1">
@@ -745,11 +707,10 @@ const Step5 = ({ onPrev, onNext }) => {
             <button
               onClick={() => onNext({ preferences: selectedOptions })}
               disabled={selectedOptions.length === 0}
-              className={`flex items-center gap-2 px-10 py-3 rounded-lg text-sm font-bold shadow-md transition-all active:scale-95 group ${
-                selectedOptions.length > 0
-                  ? 'bg-[#4F378A] text-white hover:bg-violet-800 hover:-translate-y-0.5 hover:shadow-lg'
-                  : 'bg-gray-200 text-gray-400 cursor-not-allowed opacity-50'
-              }`}
+              className={`flex items-center gap-2 px-10 py-3 rounded-lg text-sm font-bold shadow-md transition-all active:scale-95 group ${selectedOptions.length > 0
+                ? 'bg-[#4F378A] text-white hover:bg-violet-800 hover:-translate-y-0.5 hover:shadow-lg'
+                : 'bg-gray-200 text-gray-400 cursor-not-allowed opacity-50'
+                }`}
             >
               Next Step
               <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
@@ -987,7 +948,6 @@ export default function QuizPage() {
 
   return (
     <div className="bg-slate-50 min-h-screen flex flex-col text-gray-900" style={{ fontFamily: 'Inter, sans-serif' }}>
-      <Header />
       {currentStep === 1 && <Step1 onNext={handleNext} />}
       {currentStep === 2 && <Step2 onPrev={handlePrev} onNext={handleNext} />}
       {currentStep === 3 && <Step3 onPrev={handlePrev} onNext={handleNext} />}
