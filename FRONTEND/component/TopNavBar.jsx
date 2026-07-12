@@ -2,14 +2,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-export default function Navbar() {
+export default function TopNavBar() {
   const pathname = usePathname();
 
   const navLinks = [
     { name: "Discover", href: "/Discover" },
     { name: "Marketplace", href: "/Home" }, // Using /Home for Marketplace since that's the available puppies page
     { name: "AI Match", href: "/AIMatch" },
-    { name: "Resources", href: "/Resources" },
   ];
 
   return (

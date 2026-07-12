@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 
 export default function ProfilePage() {
     return (
@@ -43,10 +44,10 @@ export default function ProfilePage() {
                                 </a>
                             </li>
                             <li>
-                                <a className="flex items-center gap-3 text-gray-600 dark:text-[#7a7582] hover:bg-[#e6e0e9] dark:hover:bg-[#322f35] rounded-xl px-4 py-3 text-sm font-medium transition-all hover:translate-x-1 duration-200 active:scale-98" href="#">
+                                <Link className="flex items-center gap-3 text-gray-600 dark:text-[#7a7582] hover:bg-[#e6e0e9] dark:hover:bg-[#322f35] rounded-xl px-4 py-3 text-sm font-medium transition-all hover:translate-x-1 duration-200 active:scale-98" href="/Favourite">
                                     <span className="material-symbols-outlined">bookmark</span>
                                     Saved Breeds
-                                </a>
+                                </Link>
                             </li>
                             <li>
                                 <a className="flex items-center gap-3 text-gray-600 dark:text-[#7a7582] hover:bg-[#e6e0e9] dark:hover:bg-[#322f35] rounded-xl px-4 py-3 text-sm font-medium transition-all hover:translate-x-1 duration-200 active:scale-98" href="#">

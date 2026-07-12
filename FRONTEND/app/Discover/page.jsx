@@ -1,9 +1,11 @@
 "use client";
 import Link from "next/link";
+import TopNavBar from "../../component/TopNavBar";
 
 export default function DiscoverPage() {
   return (
     <div className="bg-[#fdf7ff] text-[#1d1b20] antialiased selection:bg-[#6750a4] selection:text-[#e0d2ff] font-[Inter,sans-serif]">
+      <TopNavBar />
 
       {/* ── Main Content ─────────────────────────────────────────── */}
       <main className="pt-24 pb-20 max-w-[1280px] mx-auto px-4 md:px-6">

@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-
+import TopNavBar from "../../component/TopNavBar";
 
 export default function Home() {
   const [puppies, setPuppies] = useState([]);
@@ -29,8 +29,8 @@ export default function Home() {
   }, []);
 
   return (
-
     <div className="bg-[#fdf7ff] text-gray-900 text-base antialiased min-h-screen flex flex-col font-[Inter,sans-serif]">
+      <TopNavBar />
 
       {/* ── Main ────────────────────────────────────────────────── */}
       <main className="flex-1 mt-20 pt-12 pb-20 px-6 max-w-[1280px] mx-auto w-full">
