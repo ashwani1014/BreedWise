@@ -56,10 +56,10 @@ export default function ProfilePage() {
                                 </a>
                             </li>
                             <li>
-                                <a className="flex items-center gap-3 text-gray-600 dark:text-[#7a7582] hover:bg-[#e6e0e9] dark:hover:bg-[#322f35] rounded-xl px-4 py-3 text-sm font-medium transition-all hover:translate-x-1 duration-200 active:scale-98" href="#">
+                                <Link className="flex items-center gap-3 text-gray-600 dark:text-[#7a7582] hover:bg-[#e6e0e9] dark:hover:bg-[#322f35] rounded-xl px-4 py-3 text-sm font-medium transition-all hover:translate-x-1 duration-200 active:scale-98" href="/Settings">
                                     <span className="material-symbols-outlined">settings</span>
                                     Settings
-                                </a>
+                                </Link>
                             </li>
                         </ul>
                     </div>
