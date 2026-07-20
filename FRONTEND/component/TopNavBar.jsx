@@ -1,9 +1,11 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useAuth } from "@/app/Context/AuthContext";
 
 export default function TopNavBar() {
   const pathname = usePathname();
+  const { user, logout } = useAuth();
 
   const navLinks = [
     { name: "Discover", href: "/Discover" },
@@ -55,12 +57,33 @@ export default function TopNavBar() {
             ))}
           </div>
           <div className="flex items-center gap-2">
-            <Link href="/Login" className="hidden md:block text-sm font-medium text-gray-600 hover:text-[#4f378a] transition-colors px-3 py-2">
-              Sign In
+            {user ? (
+              <div className="hidden md:flex items-center gap-3 px-3 py-2">
+                <Link 
+                  href="/Profile" 
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-violet-50 text-[#4f378a] hover:bg-violet-100 hover:shadow-sm transition-all cursor-pointer border border-[#cbc4d2]/40"
+                >
+                  <div className="w-6 h-6 rounded-full bg-[#4f378a] text-white flex items-center justify-center text-xs font-bold shrink-0">
+                    {user.name ? user.name.charAt(0).toUpperCase() : "U"}
+                  </div>
+                  <span className="text-sm font-semibold pr-1 truncate max-w-[120px]">
+                    {user.name}
+                  </span>
+                </Link>
+
+
+              </div>
+            ) : (
+              <Link
+                href="/Login"
+                className="hidden md:block text-sm font-medium text-gray-600 hover:text-[#4f378a] transition-colors px-3 py-2"
+              >
+                Sign In
+              </Link>
+            )}
+            <Link href="/Quiz" className="text-sm font-medium bg-[#4f378a] text-white px-6 py-2 rounded-lg hover:bg-[#6750a4] transition-all shadow-sm active:scale-95 inline-flex items-center justify-center">
+              Take Match Quiz
             </Link>
-            <button className="text-sm font-medium bg-[#4f378a] text-white px-6 py-2 rounded-lg hover:bg-[#6750a4] transition-all shadow-sm active:scale-95">
-              Find a Puppy
-            </button>
             <button className="md:hidden text-gray-500 p-1">
               <span className="material-symbols-outlined">menu</span>
             </button>

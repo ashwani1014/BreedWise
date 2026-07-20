@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import BrandingPanel from "@/component/BrandingPanel";
 import AuthCard from "@/component/AuthCard";
 import AuthDivider from "@/component/AuthDivider";
@@ -25,6 +26,7 @@ export default function SignupPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+  const router = useRouter();
 
   const handleSignup = async (e) => {
     e.preventDefault();
@@ -72,6 +74,10 @@ export default function SignupPage() {
 
       setSuccess(true);
       setError("");
+
+      setTimeout(() => {
+        router.push("/Quiz");
+      }, 1000);
 
     } catch (error) {
       setError(error.message || "Something went wrong");

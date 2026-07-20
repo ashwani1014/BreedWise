@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Outfit, Inter } from "next/font/google";
 import "./globals.css";
 import NavFooterWrapper from "../app/NavFooterWrapper";
+import { AuthProvider } from "./Context/AuthContext";
+
 
 /* ─── Fonts ──────────────────────────────────────────────────────────────── */
 const outfit = Outfit({
@@ -55,7 +57,9 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen antialiased" suppressHydrationWarning>
-        <NavFooterWrapper>{children}</NavFooterWrapper>
+        <AuthProvider>
+          <NavFooterWrapper>{children}</NavFooterWrapper>
+        </AuthProvider>
       </body>
     </html>
   );

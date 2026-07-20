@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/app/Context/AuthContext";
 import BrandingPanel from "@/component/BrandingPanel";
 import AuthCard from "@/component/AuthCard";
 import AuthDivider from "@/component/AuthDivider";
@@ -25,6 +26,7 @@ export default function Login() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const router = useRouter();
+  const { login } = useAuth();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -65,8 +67,10 @@ export default function Login() {
 
       // JWT Save
       if (data.success) {
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("loggedInUser", data.name);
+        login({
+          token: data.token,
+          user: { name: data.name }
+        });
 
         router.push("/Home");
       }

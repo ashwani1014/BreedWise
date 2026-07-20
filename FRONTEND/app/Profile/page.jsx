@@ -1,7 +1,11 @@
+"use client";
 import React from 'react';
 import Link from 'next/link';
+import { useAuth } from "@/app/Context/AuthContext";
 
 export default function ProfilePage() {
+    const { logout } = useAuth();
+
     return (
         <>
             <style>{`
@@ -77,10 +81,10 @@ export default function ProfilePage() {
                                 </a>
                             </li>
                             <li>
-                                <a className="flex items-center gap-3 text-gray-600 dark:text-[#7a7582] hover:bg-[#e6e0e9] dark:hover:bg-[#322f35] rounded-xl px-4 py-3 text-sm font-medium transition-all hover:translate-x-1 duration-200 active:scale-98" href="#">
+                                <button onClick={logout} className="flex items-center gap-3 text-gray-600 dark:text-[#7a7582] hover:bg-[#e6e0e9] dark:hover:bg-[#322f35] rounded-xl px-4 py-3 text-sm font-medium transition-all hover:translate-x-1 duration-200 active:scale-98 cursor-pointer w-full text-left">
                                     <span className="material-symbols-outlined">logout</span>
                                     Log Out
-                                </a>
+                                </button>
                             </li>
                         </ul>
                     </div>
