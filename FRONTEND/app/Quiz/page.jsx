@@ -1,5 +1,7 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
+
 import Link from 'next/link';
 
 const Step1 = ({ onNext }) => {
@@ -936,6 +938,10 @@ const Step6 = ({ onPrev, onNext }) => {
 export default function QuizPage() {
   const [currentStep, setCurrentStep] = useState(1);
   const [answers, setAnswers] = useState({});
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasError, setHasError] = useState(false);
+  const hasFetched = useRef(false);
 
   const handleNext = (stepData) => {
     setAnswers(prev => ({ ...prev, ...stepData }));
@@ -946,6 +952,42 @@ export default function QuizPage() {
     setCurrentStep(prev => prev - 1);
   };
 
+  const fetchMatches = async () => {
+    setHasError(false);
+    setIsLoading(true);
+    try {
+      const response = await fetch('http://localhost:8000/api/ai/match', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(answers)
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        localStorage.setItem('aiMatches', JSON.stringify(data.matches));
+        router.push('/AIMatch');
+      } else {
+        console.error('Failed to get matches');
+        setHasError(true);
+        setIsLoading(false);
+        hasFetched.current = false; // Allow retrying
+      }
+    } catch (error) {
+      console.error('Error fetching matches:', error);
+      setHasError(true);
+      setIsLoading(false);
+      hasFetched.current = false; // Allow retrying
+    }
+  };
+
+  useEffect(() => {
+    if (currentStep > 6 && !hasFetched.current) {
+      hasFetched.current = true; // Lock immediately to prevent loops
+      fetchMatches();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentStep]);
+
   return (
     <div className="bg-slate-50 min-h-screen flex flex-col text-gray-900" style={{ fontFamily: 'Inter, sans-serif' }}>
       {currentStep === 1 && <Step1 onNext={handleNext} />}
@@ -955,8 +997,30 @@ export default function QuizPage() {
       {currentStep === 5 && <Step5 onPrev={handlePrev} onNext={handleNext} />}
       {currentStep === 6 && <Step6 onPrev={handlePrev} onNext={handleNext} />}
       {currentStep > 6 && (
-        <main className="flex-grow pt-32 pb-40 flex items-center justify-center text-gray-500">
-          <p className="text-xl font-medium">🎉 Quiz complete! Processing your matches...</p>
+        <main className="flex-grow pt-32 pb-40 flex flex-col items-center justify-center text-gray-500">
+          {!hasError ? (
+            <>
+              <div className="w-16 h-16 border-4 border-[#4F378A] border-t-transparent rounded-full animate-spin mb-4"></div>
+              <p className="text-2xl font-bold text-[#4F378A]" style={{ fontFamily: 'Outfit, sans-serif' }}>
+                Breedwise AI is analyzing...
+              </p>
+              <p className="text-md mt-2 text-gray-500 font-medium">Finding the perfect companions from 250+ breeds</p>
+            </>
+          ) : (
+            <>
+              <span className="material-symbols-outlined text-red-500 text-5xl mb-4">error</span>
+              <p className="text-2xl font-bold text-red-500" style={{ fontFamily: 'Outfit, sans-serif' }}>
+                Oops! Something went wrong.
+              </p>
+              <p className="text-md mt-2 text-gray-500 font-medium">Please wait a few seconds and try again.</p>
+              <button
+                onClick={fetchMatches}
+                className="mt-6 bg-[#4F378A] text-white px-8 py-3 rounded-full text-sm font-bold shadow-lg hover:-translate-y-0.5 transition-all"
+              >
+                Try Again
+              </button>
+            </>
+          )}
         </main>
       )}
     </div>

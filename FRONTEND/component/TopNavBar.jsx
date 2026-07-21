@@ -59,8 +59,8 @@ export default function TopNavBar() {
           <div className="flex items-center gap-2">
             {user ? (
               <div className="hidden md:flex items-center gap-3 px-3 py-2">
-                <Link 
-                  href="/Profile" 
+                <Link
+                  href="/Profile"
                   className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-violet-50 text-[#4f378a] hover:bg-violet-100 hover:shadow-sm transition-all cursor-pointer border border-[#cbc4d2]/40"
                 >
                   <div className="w-6 h-6 rounded-full bg-[#4f378a] text-white flex items-center justify-center text-xs font-bold shrink-0">
@@ -81,7 +81,8 @@ export default function TopNavBar() {
                 Sign In
               </Link>
             )}
-            <Link href="/Quiz" className="text-sm font-medium bg-[#4f378a] text-white px-6 py-2 rounded-lg hover:bg-[#6750a4] transition-all shadow-sm active:scale-95 inline-flex items-center justify-center">
+
+            <Link href={user ? "/Quiz" : "/Login"} className="text-sm font-medium bg-[#4f378a] text-white px-6 py-2 rounded-lg hover:bg-[#6750a4] transition-all shadow-sm active:scale-95 inline-flex items-center justify-center">
               Take Match Quiz
             </Link>
             <button className="md:hidden text-gray-500 p-1">
