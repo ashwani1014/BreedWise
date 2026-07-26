@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/app/Context/AuthContext";
 import BrandingPanel from "@/component/BrandingPanel";
 import AuthCard from "@/component/AuthCard";
 import AuthDivider from "@/component/AuthDivider";
@@ -27,6 +28,7 @@ export default function SignupPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const router = useRouter();
+  const { login } = useAuth();
 
   const handleSignup = async (e) => {
     e.preventDefault();
@@ -75,8 +77,16 @@ export default function SignupPage() {
       setSuccess(true);
       setError("");
 
+      // Token + user data save karo AuthContext mein
+      if (data.token) {
+        login({
+          token: data.token,
+          user: { name: data.name },
+        });
+      }
+
       setTimeout(() => {
-        router.push("/Quiz");
+        router.push("/Quiz"); // Seedha Quiz par le jao
       }, 1000);
 
     } catch (error) {

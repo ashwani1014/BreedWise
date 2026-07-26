@@ -37,8 +37,8 @@ export default function AIMatchPage() {
             {/* Match Visuals */}
             <div className="lg:col-span-7 relative">
               <div className="rounded-[2rem] overflow-hidden shadow-[0px_4px_20px_rgba(31,41,51,0.04),0px_2px_4px_rgba(31,41,51,0.02)] aspect-[4/3] group cursor-pointer relative">
-                {/* Yahan maine generic dog ki image dali hai kyunki AI sirf naam deta hai */}
-                <img className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt={topMatch.name} src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=800&auto=format&fit=crop" />
+                {/* Yahan dynamically AI generated image URL use ho raha hai, agar na mile to fallback */}
+                <img className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt={topMatch.name} src={topMatch.imageUrl || "https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=800&auto=format&fit=crop"} />
                 {/* Percentage Badge Overlay */}
                 <div className="absolute top-6 left-6 bg-gradient-to-br from-[#4f378a] to-[#6750a4] text-white px-6 py-3 rounded-full flex items-center gap-2 shadow-[0px_4px_20px_rgba(31,41,51,0.04)]">
                   <span className="font-['Outfit'] text-[24px] leading-[32px] font-bold">{topMatch.matchPercentage}%</span>
@@ -107,7 +107,7 @@ export default function AIMatchPage() {
               {secondaryMatches.map((match, index) => (
                 <div key={index} className="bg-[#fdf7ff] shadow-[0px_4px_20px_rgba(31,41,51,0.04),0px_2px_4px_rgba(31,41,51,0.02)] rounded-2xl overflow-hidden group hover:shadow-[0px_10px_30px_rgba(31,41,51,0.08),0px_4px_8px_rgba(31,41,51,0.04)] hover:-translate-y-1 transition-all duration-300 flex flex-col">
                   <div className="h-64 relative overflow-hidden">
-                    <img className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt={match.name} src={index === 0 ? "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?q=80&w=800&auto=format&fit=crop" : "https://images.unsplash.com/photo-1537151608804-ea6f11788ce7?q=80&w=800&auto=format&fit=crop"} />
+                    <img className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt={match.name} src={match.imageUrl || (index === 0 ? "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?q=80&w=800&auto=format&fit=crop" : "https://images.unsplash.com/photo-1537151608804-ea6f11788ce7?q=80&w=800&auto=format&fit=crop")} />
                     <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-full text-[#4f378a] font-bold text-sm">{match.matchPercentage}% Match</div>
                   </div>
                   <div className="p-6 flex flex-col flex-grow">

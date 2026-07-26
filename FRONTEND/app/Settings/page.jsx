@@ -1,240 +1,381 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { useAuth } from "@/app/Context/AuthContext";
+import { useRouter } from 'next/navigation';
 
 export default function SettingsPage() {
-  const [name, setName] = useState('Alex Rivera');
-  const [location, setLocation] = useState('Austin, Texas');
-  const [bio, setBio] = useState('Passionate about Golden Retrievers and active outdoor dogs. Looking for a loyal companion for weekend hikes.');
-  const [isMatchNotificationsEnabled, setMatchNotificationsEnabled] = useState(true);
-  const [isNewsletterEnabled, setNewsletterEnabled] = useState(false);
-  const [isTwoFactorEnabled, setTwoFactorEnabled] = useState(true);
-  const [isSaving, setIsSaving] = useState(false);
-  const [saveStatus, setSaveStatus] = useState('Save Changes');
+    const { user, logout, refreshUser } = useAuth();
+    const router = useRouter();
 
-  const handleSave = () => {
-    setIsSaving(true);
-    setSaveStatus('Saving...');
-    setTimeout(() => {
-      setSaveStatus('Saved!');
-      setIsSaving(false);
-      setTimeout(() => {
-        setSaveStatus('Save Changes');
-      }, 2000);
-    }, 1000);
-  };
+    // Form states
+    const [name, setName] = useState("");
+    const [location, setLocation] = useState("");
+    const [bio, setBio] = useState("");
 
-  return (
-    <div className="bg-[#F8F6F2] text-[#1d1b20] font-['Inter'] text-[16px] leading-[24px] antialiased overflow-x-hidden flex min-h-screen">
-      {/* Main Content Area */}
-      <main className="flex-1 min-h-screen pb-[80px] flex flex-col">
-        {/* Header */}
-        <header className="h-20 px-[24px] flex items-center justify-between sticky top-0 bg-[#fdf7ff]/80 backdrop-blur-md z-30">
-          <div>
-            <h2 className="font-['Outfit'] text-[24px] leading-[32px] font-bold text-[#4f378a]">Settings</h2>
-            <p className="font-['Inter'] text-[16px] leading-[24px] text-[#494551]">Manage your profile and pet preferences</p>
-          </div>
-          <div className="flex items-center gap-4">
-            <button className="p-2 text-[#494551] hover:bg-[#e6e0e9] rounded-full transition-all">
-              <span className="material-symbols-outlined">notifications</span>
-            </button>
-            <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-[#6750a4]">
-              <img
-                className="w-full h-full object-cover"
-                alt="Profile"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqTIyOnc6L3jHjRkgdnbQiZpMvAIMwNR9WeF1Yv1aAMeLrOW6dPHCCzO5XPsctZ_SQGSuKVpDxbuMEBKj03da9lqS88awZAZIr_ERxwpHJIxFxTwq8-HrP5itcAiyXjUWXAjTIUvvTRiOPukXMyIXyy2dHEiK-JZ5QcXq7PRsJpXD-DoOS5M6PwZgDAd1WbtLNPFqgsI-yCaxLr2Y9Lo2ww9DZ_M0hN0M-adWFwkYf1AfXE9uJhV07UPTBBCyxlyiI8JLyPu9iS-ZC"
-              />
-            </div>
-          </div>
-        </header>
+    // Toggle states for preferences
+    const [matchNotifs, setMatchNotifs] = useState(true);
+    const [breederAlerts, setBreederAlerts] = useState(true);
+    const [newsletter, setNewsletter] = useState(false);
+    const [smsAlerts, setSmsAlerts] = useState(false);
 
-        <div className="max-w-4xl w-full mx-auto px-[24px] mt-[48px] flex-1">
-          <div className="mb-[48px]">
-            <h3 className="font-['Outfit'] text-[32px] leading-[40px] font-semibold text-[#1d1b20] mb-2">Welcome back, Alex</h3>
-            <p className="text-[#494551] opacity-80 font-['Inter'] text-[16px] leading-[24px]">Your profile is 85% complete. Complete your breeder verification to get better matches.</p>
-          </div>
+    // Save Button state
+    const [isSaving, setIsSaving] = useState(false);
+    const [saveText, setSaveText] = useState('Save Profile');
+    const [error, setError] = useState("");
 
-          {/* Bento Layout Sections */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+    // Populate form fields when user data loads from context
+    useEffect(() => {
+        if (user) {
+            setName(user.name || "");
+            setLocation(user.location || "");
+            setBio(user.bio || "");
+            setMatchNotifs(user.preferences?.matchNotifications ?? true);
+            setBreederAlerts(user.preferences?.breederAlerts ?? true);
+            setNewsletter(user.preferences?.newsletter ?? false);
+            setSmsAlerts(user.preferences?.smsAlerts ?? false);
+        }
+    }, [user]);
 
-            {/* Public Profile (Large Card) */}
-            <section className="md:col-span-3 bg-[#ffffff] rounded-xl shadow-[0_4px_20px_rgba(31,41,51,0.04),0_2px_4px_rgba(31,41,51,0.02)] p-[48px] border border-[#cbc4d2]/10">
-              <div className="flex flex-col md:flex-row gap-[80px]">
-                <div className="flex flex-col items-center gap-4">
-                  <div className="relative group cursor-pointer">
-                    <div className="w-32 h-32 rounded-2xl overflow-hidden ring-4 ring-[#6750a4]/20">
-                      <img
-                        className="w-full h-full object-cover transition-transform group-hover:scale-105 duration-500"
-                        alt="Profile picture"
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCfcRgiD7rOrMkLHYmce7AdaZTBvNQGibfWpvvapHvlzQXZgJzJ03h36_2hmFz92VUHvIeC4b0cGC6AYPmT1mvIZd3wJAu0VI_M344W5sEUCx9GKI4pdQfy1_On-P0sNaEICtmNRwLFliQH_qnqxh_3nORoASbaML-QFUZxksqMJxBjUAwI0wH8kJmiOvZT-iqsrjW3MX5pcQYmz8MEnmzaeNZHg9ES5tZtiARgDkp1_6owIcZXOujLYc_DFuSVgHtIuO3nwp9QRnCk"
-                      />
+    const handleLogout = () => {
+        logout();
+        router.push('/Login');
+    };
+
+    const handleSave = async () => {
+        setIsSaving(true);
+        setSaveText('Saving...');
+        setError("");
+
+        const token = localStorage.getItem("token");
+        if (!token) {
+            setError("You are not logged in.");
+            setIsSaving(false);
+            setSaveText('Save Profile');
+            return;
+        }
+
+        try {
+            const res = await fetch("http://localhost:8000/auth/me", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    name,
+                    location,
+                    bio,
+                    preferences: {
+                        matchNotifications: matchNotifs,
+                        breederAlerts,
+                        newsletter,
+                        smsAlerts,
+                    },
+                }),
+            });
+
+            if (!res.ok) {
+                const data = await res.json();
+                throw new Error(data.message || "Failed to save");
+            }
+
+            // Refresh user data in context after successful save
+            await refreshUser();
+
+            setSaveText('Profile Saved!');
+            setTimeout(() => {
+                setSaveText('Save Profile');
+            }, 2000);
+        } catch (err) {
+            setError(err.message || "Something went wrong");
+            setSaveText('Save Profile');
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
+    return (
+        <div className="bg-slate-50 min-h-screen font-sans text-gray-900 flex" style={{ fontFamily: 'Inter, sans-serif' }}>
+            {/* Fixed Left Sidebar */}
+            <aside className="fixed left-0 top-0 h-full w-72 flex-col bg-white border-r border-gray-200 p-6 z-40 hidden md:flex">
+                <div className="mb-12 px-2">
+                    <div className="flex items-center gap-2 mb-1">
+                        <span className="material-symbols-outlined text-[#4F378A] text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>pets</span>
+                        <span className="text-2xl font-bold text-[#4F378A] tracking-tight" style={{ fontFamily: 'Outfit, sans-serif' }}>Breedwise</span>
                     </div>
-                    <button className="absolute -bottom-2 -right-2 bg-[#4f378a] text-[#ffffff] p-2 rounded-lg shadow-lg hover:bg-[#6750a4] transition-colors active:scale-90">
-                      <span className="material-symbols-outlined text-sm">edit</span>
+                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Verified Adopter</p>
+                </div>
+                
+                <nav className="flex-1 space-y-2">
+                    <Link href="/Profile" className="flex items-center gap-3 text-gray-600 hover:bg-gray-50 rounded-xl px-4 py-3 font-medium transition-all">
+                        <span className="material-symbols-outlined">dashboard</span>
+                        <span className="text-sm">Overview</span>
+                    </Link>
+                    <Link href="/AIMatch" className="flex items-center gap-3 text-gray-600 hover:bg-gray-50 rounded-xl px-4 py-3 font-medium transition-all">
+                        <span className="material-symbols-outlined">pets</span>
+                        <span className="text-sm">My Matches</span>
+                    </Link>
+                    <Link href="/Favourite" className="flex items-center gap-3 text-gray-600 hover:bg-gray-50 rounded-xl px-4 py-3 font-medium transition-all">
+                        <span className="material-symbols-outlined">bookmark</span>
+                        <span className="text-sm">Saved Breeds</span>
+                    </Link>
+                    <Link href="/Inquiries" className="flex items-center gap-3 text-gray-600 hover:bg-gray-50 rounded-xl px-4 py-3 font-medium transition-all">
+                        <span className="material-symbols-outlined">chat_bubble</span>
+                        <span className="text-sm">Inquiries</span>
+                    </Link>
+                    <Link href="/Settings" className="flex items-center gap-3 bg-violet-100 text-[#4F378A] rounded-xl px-4 py-3 font-semibold transition-all shadow-sm">
+                        <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>settings</span>
+                        <span className="text-sm">Settings</span>
+                    </Link>
+                </nav>
+                
+                <div className="mt-auto pt-6 border-t border-gray-200 space-y-2">
+                    <Link href="/Help" className="flex items-center gap-3 text-gray-600 hover:bg-gray-50 rounded-xl px-4 py-3 font-medium transition-all">
+                        <span className="material-symbols-outlined">help</span>
+                        <span className="text-sm">Help Center</span>
+                    </Link>
+                    <button onClick={handleLogout} className="flex items-center gap-3 w-full text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-xl px-4 py-3 transition-all cursor-pointer">
+                        <span className="material-symbols-outlined">logout</span>
+                        <span className="text-sm font-semibold">Log Out</span>
                     </button>
-                  </div>
-                  <p className="font-['Inter'] text-[14px] leading-[20px] font-medium text-[#7a7582]">JPG or PNG, max 5MB</p>
                 </div>
+            </aside>
 
-                <div className="flex-1 space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2 group">
-                      <label className="font-['Inter'] text-[14px] leading-[20px] font-medium text-[#494551] ml-1">Full Name</label>
-                      <input
-                        className="w-full h-12 bg-[#f2ecf4] rounded-lg border-transparent focus:border-[#4f378a] focus:ring-0 px-4 transition-all group-focus-within:scale-[1.01] outline-none"
-                        type="text"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                      />
+            {/* Main Content Area */}
+            <main className="md:ml-72 flex-1 min-h-screen p-8 lg:p-12 w-full overflow-x-hidden">
+                <div className="max-w-4xl mx-auto">
+                    {/* Header */}
+                    <header className="mb-10">
+                        <h2 className="text-3xl font-bold text-gray-900 mb-2" style={{ fontFamily: 'Outfit, sans-serif' }}>Settings</h2>
+                        <p className="text-gray-500 font-medium text-sm">Manage your account, preferences, and security.</p>
+                    </header>
+
+                    {/* Error Banner */}
+                    {error && (
+                        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm font-medium flex items-center gap-2">
+                            <span className="material-symbols-outlined text-[18px]">error</span>
+                            {error}
+                        </div>
+                    )}
+
+                    {/* Grid Content */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        
+                        {/* Profile Settings Card */}
+                        <section className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-gray-100 md:col-span-2">
+                            <div className="flex items-center gap-3 mb-8">
+                                <span className="material-symbols-outlined text-[#4F378A] text-2xl">person</span>
+                                <h3 className="text-xl font-bold text-gray-900" style={{ fontFamily: 'Outfit, sans-serif' }}>Profile Settings</h3>
+                            </div>
+                            
+                            <div className="flex flex-col md:flex-row gap-8">
+                                <div className="flex flex-col items-center gap-3 shrink-0">
+                                    <div className="relative group">
+                                        <div className="w-28 h-28 rounded-full border-4 border-violet-100 bg-violet-200 flex items-center justify-center text-4xl font-bold text-[#4F378A] shadow-sm" style={{ fontFamily: 'Outfit, sans-serif' }}>
+                                            {user?.name?.[0]?.toUpperCase() || "U"}
+                                        </div>
+                                        <button className="absolute bottom-0 right-0 bg-[#4F378A] text-white p-2 rounded-full shadow-lg hover:scale-105 transition-transform cursor-pointer">
+                                            <span className="material-symbols-outlined text-sm">edit</span>
+                                        </button>
+                                    </div>
+                                    <span className="text-xs font-semibold text-gray-400">Change Photo</span>
+                                </div>
+                                
+                                <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-5">
+                                    <div className="flex flex-col gap-1.5">
+                                        <label className="text-xs font-bold uppercase tracking-wider text-gray-500 px-1">Full Name</label>
+                                        <input 
+                                            className="w-full bg-slate-50 border border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-[#4F378A]/30 focus:border-[#4F378A] outline-none font-medium text-sm text-gray-900" 
+                                            type="text" 
+                                            value={name}
+                                            onChange={(e) => setName(e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="flex flex-col gap-1.5">
+                                        <label className="text-xs font-bold uppercase tracking-wider text-gray-500 px-1">Location</label>
+                                        <input 
+                                            className="w-full bg-slate-50 border border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-[#4F378A]/30 focus:border-[#4F378A] outline-none font-medium text-sm text-gray-900" 
+                                            type="text" 
+                                            value={location}
+                                            onChange={(e) => setLocation(e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="flex flex-col gap-1.5 md:col-span-2">
+                                        <label className="text-xs font-bold uppercase tracking-wider text-gray-500 px-1">Short Bio</label>
+                                        <textarea 
+                                            className="w-full bg-slate-50 border border-gray-200 rounded-xl px-4 py-3 h-24 resize-none focus:ring-2 focus:ring-[#4F378A]/30 focus:border-[#4F378A] outline-none font-medium text-sm text-gray-900" 
+                                            value={bio}
+                                            onChange={(e) => setBio(e.target.value)}
+                                        ></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div className="mt-8 flex justify-end">
+                                <button 
+                                    onClick={handleSave}
+                                    disabled={isSaving}
+                                    className={`font-bold text-sm px-8 py-3 rounded-xl shadow-md active:scale-95 transition-all cursor-pointer disabled:opacity-80 ${
+                                        saveText === 'Profile Saved!'
+                                            ? 'bg-green-600 text-white'
+                                            : 'bg-[#4F378A] text-white hover:bg-violet-800'
+                                    }`}
+                                >
+                                    {isSaving && <span className="material-symbols-outlined animate-spin mr-2 text-[18px] align-middle">progress_activity</span>}
+                                    {!isSaving && saveText === 'Profile Saved!' && <span className="material-symbols-outlined mr-2 text-[18px] align-middle">check</span>}
+                                    {saveText}
+                                </button>
+                            </div>
+                        </section>
+
+                        {/* Account Security Card */}
+                        <section className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-gray-100">
+                            <div className="flex items-center gap-3 mb-8">
+                                <span className="material-symbols-outlined text-[#4F378A]">shield</span>
+                                <h3 className="text-xl font-bold text-gray-900" style={{ fontFamily: 'Outfit, sans-serif' }}>Account Security</h3>
+                            </div>
+                            <div className="space-y-6">
+                                <div>
+                                    <div className="flex justify-between items-center mb-1">
+                                        <label className="text-xs font-bold uppercase tracking-wider text-gray-500">Email Address</label>
+                                        <span className="bg-green-100 text-green-700 text-[10px] uppercase font-bold px-2 py-0.5 rounded-full">Verified</span>
+                                    </div>
+                                    <div className="flex gap-2">
+                                        <input 
+                                            className="flex-1 bg-slate-50 border border-gray-200 rounded-xl px-4 py-2.5 text-gray-500 font-medium text-sm outline-none" 
+                                            readOnly 
+                                            type="email" 
+                                            value={user?.email || ""} 
+                                        />
+                                        <button className="text-[#4F378A] font-bold text-sm hover:underline cursor-pointer px-2">Change</button>
+                                    </div>
+                                </div>
+                                <div className="pt-2 border-t border-gray-100">
+                                    <label className="text-xs font-bold uppercase tracking-wider text-gray-500 block mb-1">Password</label>
+                                    <p className="font-medium text-xs text-gray-400 mb-4">Last changed 4 months ago</p>
+                                    <button className="w-full bg-slate-100 text-gray-700 font-bold text-sm px-4 py-3 rounded-xl hover:bg-slate-200 transition-colors cursor-pointer">
+                                        Update Password
+                                    </button>
+                                </div>
+                            </div>
+                        </section>
+
+                        {/* Notification Preferences Card */}
+                        <section className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-gray-100">
+                            <div className="flex items-center gap-3 mb-8">
+                                <span className="material-symbols-outlined text-[#4F378A]">arrows_outward</span>
+                                <h3 className="text-xl font-bold text-gray-900" style={{ fontFamily: 'Outfit, sans-serif' }}>Notifications</h3>
+                            </div>
+                            <div className="space-y-5">
+                                <div className="flex items-center justify-between">
+                                    <div className="flex flex-col">
+                                        <span className="font-bold text-sm text-gray-900">New Matches</span>
+                                        <span className="font-medium text-xs text-gray-400">Get alerts for new pet matches</span>
+                                    </div>
+                                    <label className="relative inline-flex items-center cursor-pointer">
+                                        <input 
+                                            type="checkbox" 
+                                            className="sr-only peer" 
+                                            checked={matchNotifs} 
+                                            onChange={() => setMatchNotifs(!matchNotifs)}
+                                        />
+                                        <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#4F378A]"></div>
+                                    </label>
+                                </div>
+                                <div className="flex items-center justify-between">
+                                    <div className="flex flex-col">
+                                        <span className="font-bold text-sm text-gray-900">Message Alerts</span>
+                                        <span className="font-medium text-xs text-gray-400">Notify when a breeder replies</span>
+                                    </div>
+                                    <label className="relative inline-flex items-center cursor-pointer">
+                                        <input 
+                                            type="checkbox" 
+                                            className="sr-only peer" 
+                                            checked={breederAlerts} 
+                                            onChange={() => setBreederAlerts(!breederAlerts)}
+                                        />
+                                        <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#4F378A]"></div>
+                                    </label>
+                                </div>
+                                <div className="flex items-center justify-between">
+                                    <div className="flex flex-col">
+                                        <span className="font-bold text-sm text-gray-900">Newsletter</span>
+                                        <span className="font-medium text-xs text-gray-400">Pet care tips and updates</span>
+                                    </div>
+                                    <label className="relative inline-flex items-center cursor-pointer">
+                                        <input 
+                                            type="checkbox" 
+                                            className="sr-only peer" 
+                                            checked={newsletter} 
+                                            onChange={() => setNewsletter(!newsletter)}
+                                        />
+                                        <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#4F378A]"></div>
+                                    </label>
+                                </div>
+                                <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                                    <div className="flex flex-col">
+                                        <span className="font-bold text-sm text-gray-900">SMS Alerts</span>
+                                        <span className="font-medium text-xs text-gray-400">Urgent match notifications</span>
+                                    </div>
+                                    <label className="relative inline-flex items-center cursor-pointer">
+                                        <input 
+                                            type="checkbox" 
+                                            className="sr-only peer" 
+                                            checked={smsAlerts} 
+                                            onChange={() => setSmsAlerts(!smsAlerts)}
+                                        />
+                                        <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#4F378A]"></div>
+                                    </label>
+                                </div>
+                            </div>
+                        </section>
+
+                        {/* Privacy & Data Card */}
+                        <section className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-gray-100 md:col-span-2">
+                            <div className="flex items-center gap-3 mb-6">
+                                <span className="material-symbols-outlined text-[#4F378A]">lock</span>
+                                <h3 className="text-xl font-bold text-gray-900" style={{ fontFamily: 'Outfit, sans-serif' }}>Privacy & Data</h3>
+                            </div>
+                            
+                            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mb-8">
+                                <div className="max-w-xl">
+                                    <h4 className="font-bold text-gray-900 text-sm mb-1">Profile Visibility</h4>
+                                    <p className="font-medium text-sm text-gray-500">Your profile is currently visible to verified breeders. You can hide it at any time to pause match inquiries.</p>
+                                </div>
+                                <button className="bg-slate-100 text-gray-700 font-bold text-sm px-6 py-2.5 rounded-xl hover:bg-slate-200 transition-colors whitespace-nowrap cursor-pointer">
+                                    Switch to Private
+                                </button>
+                            </div>
+                            
+                            <div className="pt-6 border-t border-red-100">
+                                <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                                    <div>
+                                        <h4 className="font-bold text-sm text-red-600 mb-1">Delete Account</h4>
+                                        <p className="font-medium text-xs text-red-600/80">Once you delete your account, there is no going back. Please be certain.</p>
+                                    </div>
+                                    <button className="text-red-600 font-bold text-sm border-2 border-red-100 hover:bg-red-50 px-6 py-2.5 rounded-xl transition-all active:scale-95 cursor-pointer shrink-0">
+                                        Delete Account
+                                    </button>
+                                </div>
+                            </div>
+                        </section>
                     </div>
-                    <div className="space-y-2 group">
-                      <label className="font-['Inter'] text-[14px] leading-[20px] font-medium text-[#494551] ml-1">Location</label>
-                      <div className="relative group-focus-within:scale-[1.01] transition-all">
-                        <input
-                          className="w-full h-12 bg-[#f2ecf4] rounded-lg border-transparent focus:border-[#4f378a] focus:ring-0 pl-10 pr-4 transition-all outline-none"
-                          type="text"
-                          value={location}
-                          onChange={(e) => setLocation(e.target.value)}
-                        />
-                        <span className="material-symbols-outlined absolute left-3 top-3 text-[#7a7582] text-xl">location_on</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="space-y-2 group">
-                    <label className="font-['Inter'] text-[14px] leading-[20px] font-medium text-[#494551] ml-1">Bio</label>
-                    <textarea
-                      className="w-full bg-[#f2ecf4] rounded-lg border-transparent focus:border-[#4f378a] focus:ring-0 px-4 py-3 transition-all resize-none group-focus-within:scale-[1.01] outline-none"
-                      rows={3}
-                      value={bio}
-                      onChange={(e) => setBio(e.target.value)}
-                    ></textarea>
-                  </div>
-                </div>
-              </div>
-            </section>
 
-            {/* Account Security */}
-            <section className="md:col-span-2 bg-[#ffffff] rounded-xl shadow-[0_4px_20px_rgba(31,41,51,0.04),0_2px_4px_rgba(31,41,51,0.02)] p-[48px] border border-[#cbc4d2]/10 space-y-6">
-              <div className="flex items-center justify-between">
-                <h4 className="font-['Outfit'] text-[24px] leading-[32px] font-medium text-[#1d1b20] flex items-center gap-2">
-                  <span className="material-symbols-outlined text-[#4f378a]">security</span>
-                  Account Security
-                </h4>
-              </div>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between p-4 bg-[#f2ecf4] rounded-xl">
-                  <div>
-                    <p className="font-['Inter'] text-[14px] leading-[20px] font-medium text-[#494551]">Email Address</p>
-                    <p className="font-['Inter'] text-[16px] leading-[24px] font-medium">alex.rivera@example.com</p>
-                  </div>
-                  <span className="flex items-center gap-1 bg-[#10b981]/10 text-[#6750a4] px-3 py-1 rounded-full text-xs font-semibold">
-                    <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>verified</span>
-                    Verified
-                  </span>
+                    {/* Global Footer */}
+                    <footer className="mt-12 py-10 border-t border-gray-200 flex flex-col md:flex-row justify-between items-center gap-6">
+                        <div className="text-center md:text-left">
+                            <span className="font-bold text-gray-900 text-lg" style={{ fontFamily: 'Outfit, sans-serif' }}>Breedwise</span>
+                            <p className="font-semibold text-xs text-gray-400 mt-1">© 2024 Breedwise AI. Premium Pet Matching.</p>
+                        </div>
+                        <div className="flex gap-6">
+                            <a className="font-semibold text-xs text-gray-500 hover:text-[#4F378A] transition-colors" href="#">Privacy Policy</a>
+                            <a className="font-semibold text-xs text-gray-500 hover:text-[#4F378A] transition-colors" href="#">Terms of Service</a>
+                            <a className="font-semibold text-xs text-gray-500 hover:text-[#4F378A] transition-colors" href="#">Support</a>
+                        </div>
+                    </footer>
                 </div>
-                <div className="flex items-center justify-between p-4 border border-[#cbc4d2]/30 rounded-xl hover:bg-[#f2ecf4]/30 transition-colors cursor-pointer group">
-                  <div className="flex items-center gap-3">
-                    <span className="material-symbols-outlined text-[#7a7582] group-hover:text-[#4f378a]">lock_reset</span>
-                    <div>
-                      <p className="font-['Inter'] text-[16px] leading-[24px] font-medium">Password</p>
-                      <p className="font-['Inter'] text-[14px] leading-[20px] font-medium text-[#494551]">Last changed 3 months ago</p>
-                    </div>
-                  </div>
-                  <span className="material-symbols-outlined text-[#7a7582]">chevron_right</span>
-                </div>
-                <div className="flex items-center justify-between p-4 border border-[#cbc4d2]/30 rounded-xl">
-                  <div className="flex items-center gap-3">
-                    <span className="material-symbols-outlined text-[#7a7582]">phonelink_setup</span>
-                    <div>
-                      <p className="font-['Inter'] text-[16px] leading-[24px] font-medium">Two-factor Authentication</p>
-                      <p className="font-['Inter'] text-[14px] leading-[20px] font-medium text-[#494551]">Secure your account with SMS or app</p>
-                    </div>
-                  </div>
-                  <label className="relative inline-flex items-center cursor-pointer">
-                    <input
-                      type="checkbox"
-                      className="sr-only peer"
-                      checked={isTwoFactorEnabled}
-                      onChange={(e) => setTwoFactorEnabled(e.target.checked)}
-                    />
-                    <div className="w-11 h-6 bg-[#e6e0e9] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#4f378a]"></div>
-                  </label>
-                </div>
-              </div>
-            </section>
-
-            {/* Matching Preferences */}
-            <section className="md:col-span-1 bg-[#ffffff] rounded-xl shadow-[0_4px_20px_rgba(31,41,51,0.04),0_2px_4px_rgba(31,41,51,0.02)] p-[48px] border border-[#cbc4d2]/10 space-y-6">
-              <h4 className="font-['Outfit'] text-[24px] leading-[32px] font-medium text-[#1d1b20]">Preferences</h4>
-              <div className="space-y-6">
-                <div className="flex flex-col gap-2">
-                  <div className="flex items-center justify-between">
-                    <span className="font-['Inter'] text-[16px] leading-[24px] font-medium">Breed Matches</span>
-                    <label className="relative inline-flex items-center cursor-pointer">
-                      <input
-                        type="checkbox"
-                        className="sr-only peer"
-                        checked={isMatchNotificationsEnabled}
-                        onChange={(e) => setMatchNotificationsEnabled(e.target.checked)}
-                      />
-                      <div className="w-9 h-5 bg-[#e6e0e9] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#4f378a]"></div>
-                    </label>
-                  </div>
-                  <p className="font-['Inter'] text-[14px] leading-[20px] font-medium text-[#494551] leading-tight">Instant notification for new AI matches</p>
-                </div>
-                <div className="flex flex-col gap-2">
-                  <div className="flex items-center justify-between">
-                    <span className="font-['Inter'] text-[16px] leading-[24px] font-medium">Newsletter</span>
-                    <label className="relative inline-flex items-center cursor-pointer">
-                      <input
-                        type="checkbox"
-                        className="sr-only peer"
-                        checked={isNewsletterEnabled}
-                        onChange={(e) => setNewsletterEnabled(e.target.checked)}
-                      />
-                      <div className="w-9 h-5 bg-[#e6e0e9] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#4f378a]"></div>
-                    </label>
-                  </div>
-                  <p className="font-['Inter'] text-[14px] leading-[20px] font-medium text-[#494551] leading-tight">Monthly pet care and training guides</p>
-                </div>
-              </div>
-            </section>
-
-            {/* Danger Zone */}
-            <section className="md:col-span-3 bg-[#ffdad6]/10 border border-[#ba1a1a]/20 rounded-xl p-[48px] flex flex-col md:flex-row items-center justify-between gap-4">
-              <div>
-                <h4 className="font-['Outfit'] text-[24px] leading-[32px] font-medium text-[#ba1a1a] flex items-center gap-2">
-                  <span className="material-symbols-outlined">warning</span>
-                  Danger Zone
-                </h4>
-                <p className="font-['Inter'] text-[16px] leading-[24px] text-[#494551]">Once you delete your account, all match history and saved breeds will be permanently removed.</p>
-              </div>
-              <button className="px-6 py-3 bg-white border border-[#ba1a1a]/30 text-[#ba1a1a] font-semibold rounded-lg hover:bg-[#ba1a1a]/5 transition-all active:scale-95">
-                Delete Account
-              </button>
-            </section>
-          </div>
-
-          {/* Global Actions */}
-          <div className="mt-[48px] flex items-center justify-end gap-4 border-t border-[#cbc4d2]/20 pt-[48px]">
-            <button className="px-8 py-3 text-[#1d1b20] font-medium hover:bg-[#e6e0e9] rounded-lg transition-all">
-              Cancel
-            </button>
-            <button
-              onClick={handleSave}
-              className={`px-8 py-3 font-bold rounded-lg shadow-lg transition-all active:scale-95 flex items-center ${saveStatus === 'Saved!'
-                ? 'bg-[#10b981] text-white shadow-[#10b981]/20'
-                : 'bg-[#4f378a] text-[#ffffff] hover:shadow-[#4f378a]/20 hover:bg-[#6750a4]'
-                }`}
-            >
-              {isSaving && <span className="material-symbols-outlined animate-spin mr-2">progress_activity</span>}
-              {!isSaving && saveStatus === 'Saved!' && <span className="material-symbols-outlined mr-2">check</span>}
-              {saveStatus}
-            </button>
-          </div>
+            </main>
         </div>
-
-
-      </main>
-    </div>
-  );
+    );
 }

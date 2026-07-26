@@ -25,10 +25,7 @@ const Step1 = ({ onNext }) => {
                 <span className="text-[#4F378A] font-bold text-sm tracking-widest uppercase">Lifestyle Assessment</span>
                 <h1 className="text-4xl font-semibold mt-2 text-gray-900" style={{ fontFamily: 'Outfit, sans-serif' }}>How do you live?</h1>
               </div>
-              <div className="text-right">
-                <span className="text-2xl font-medium text-[#4F378A]">1</span>
-                <span className="text-2xl font-medium text-gray-400">/6</span>
-              </div>
+              <div className="text-[#4F378A] text-2xl font-medium" style={{ fontFamily: 'Outfit, sans-serif' }}>16%</div>
             </div>
             <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
               <div className="h-full bg-[#4F378A] w-1/6 rounded-full transition-all duration-700 ease-out"></div>
@@ -387,9 +384,7 @@ const Step3 = ({ onPrev, onNext }) => {
             Previous
           </button>
           <div className="flex items-center gap-4">
-            <button className="text-gray-500 px-6 py-2 rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors">
-              Save &amp; Exit
-            </button>
+
             <button
               onClick={() => onNext({ activityLevel: selectedOption })}
               disabled={!selectedOption}
