@@ -60,7 +60,7 @@ export default function TopNavBar() {
             {user ? (
               <div className="hidden md:flex items-center gap-3 px-3 py-2">
                 <Link
-                  href="/Settings"
+                  href="/Profile"
                   className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-violet-50 text-[#4f378a] hover:bg-violet-100 hover:shadow-sm transition-all cursor-pointer border border-[#cbc4d2]/40"
                 >
                   <div className="w-6 h-6 rounded-full bg-[#4f378a] text-white flex items-center justify-center text-xs font-bold shrink-0">

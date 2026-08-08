@@ -99,7 +99,7 @@ export default function SettingsPage() {
     return (
         <div className="bg-slate-50 min-h-screen font-sans text-gray-900 flex" style={{ fontFamily: 'Inter, sans-serif' }}>
             {/* Fixed Left Sidebar */}
-            <aside className="fixed left-0 top-0 h-screen w-72 bg-white border-r border-gray-200 flex-col p-6 z-40 hidden md:flex">
+            <aside className="fixed left-0 top-0 h-screen w-56 bg-white border-r border-gray-200 flex-col p-6 z-50 hidden md:flex">
                 <div className="mb-12 px-2">
                     <div className="flex items-center gap-2 mb-1">
                         <span className="material-symbols-outlined text-[#4F378A] text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>pets</span>
@@ -107,10 +107,10 @@ export default function SettingsPage() {
                     </div>
                     <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Verified Adopter</p>
                 </div>
-                
+
                 {/* Navigation */}
-                <nav className="flex-1 space-y-2">
-                    <Link href="/Settings" className="flex items-center gap-3 bg-violet-100 text-[#4F378A] rounded-xl px-4 py-3 font-semibold transition-all shadow-sm">
+                <nav className="flex-3 space-y-1">
+                    <Link href="/Profile" className="flex items-center gap-3 bg-violet-100 text-[#4F378A] rounded-xl px-4 py-3 font-semibold transition-all shadow-sm">
                         <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>person</span>
                         <span className="text-sm">My Profile</span>
                     </Link>
@@ -126,10 +126,6 @@ export default function SettingsPage() {
                         <span className="material-symbols-outlined">quiz</span>
                         <span className="text-sm">Retake Quiz</span>
                     </Link>
-                    <Link href="/Settings" className="flex items-center gap-3 text-gray-600 hover:bg-gray-50 rounded-xl px-4 py-3 font-medium transition-all">
-                        <span className="material-symbols-outlined">settings</span>
-                        <span className="text-sm">Settings</span>
-                    </Link>
                 </nav>
 
                 {/* Footer Tab */}
@@ -142,11 +138,11 @@ export default function SettingsPage() {
             </aside>
 
             {/* Main Content Area */}
-            <main className="md:ml-72 flex-1 min-h-screen p-8 lg:p-12 w-full overflow-x-hidden">
+            <main className="md:ml-64 flex-1 min-h-screen pt-28 pb-8 px-8 lg:pt-32 lg:pb-12 lg:px-12 w-full overflow-x-hidden">
                 <div className="max-w-4xl mx-auto">
                     {/* Header */}
                     <header className="mb-10">
-                        <h2 className="text-3xl font-bold text-gray-900 mb-2" style={{ fontFamily: 'Outfit, sans-serif' }}>Settings</h2>
+                        <h2 className="text-3xl font-bold text-gray-900 mb-2" style={{ fontFamily: 'Outfit, sans-serif' }}>My Profile</h2>
                         <p className="text-gray-500 font-medium text-sm">Manage your account, preferences, and security.</p>
                     </header>
 

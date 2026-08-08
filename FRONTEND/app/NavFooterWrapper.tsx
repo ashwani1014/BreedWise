@@ -8,7 +8,7 @@ import Footer from "@/component/Footer";
 const NO_NAV_ROUTES = ["/Login", "/Signup"];
 
 // Pages jahan Footer nahi chahiye (Quiz ka apna fixed bottom nav hai)
-const NO_FOOTER_ROUTES = ["/Quiz", "/Settings", "/YourMatch"];
+const NO_FOOTER_ROUTES = ["/Quiz", "/Profile", "/YourMatch"];
 
 export default function NavFooterWrapper({
   children,
