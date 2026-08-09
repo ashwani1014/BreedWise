@@ -117,12 +117,12 @@ export default function Home() {
                   </span>
                   Portland, OR
                 </div>
-                <button className="text-[#4f378a] text-sm font-semibold hover:text-[#6750a4] transition-colors flex items-center gap-1">
+                <Link href="/Breeder/Oakwood-Retrievers" className="text-[#4f378a] text-sm font-semibold hover:text-[#6750a4] transition-colors flex items-center gap-1">
                   View Profile{" "}
                   <span className="material-symbols-outlined" style={{ fontSize: "18px" }}>
                     arrow_forward
                   </span>
-                </button>
+                </Link>
               </div>
             </div>
           </div>
@@ -208,7 +208,9 @@ export default function Home() {
                   </div>
                   <div className="flex-1">
                     <p className="text-sm font-medium text-gray-900 truncate">
-                      {puppy.breeder}
+                      <Link href={`/Breeder/${encodeURIComponent(puppy.breeder.replace(/\s+/g, '-'))}`} className="hover:underline hover:text-[#4f378a] transition-all">
+                        {puppy.breeder}
+                      </Link>
                     </p>
                     <div className="flex items-center text-amber-500">
                       <span
