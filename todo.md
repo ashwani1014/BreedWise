@@ -21,4 +21,9 @@ Here is the checklist of planned enhancements and features to build a complete, 
 - [ ] **Home Page Search & Filter**: Bind state and handlers to the "Search breeds..." input and "Filters" button on the Home page (`Home/page.jsx`) to filter puppy listings.
 - [ ] **Saved Breeds Search & Filter**: Connect the search input and breed filter dropdown in `Favourite/page.jsx` to filter the saved breeds list dynamically.
 - [ ] **Breeder Verification Details**: Add a tooltip or modal when clicking "Verified Breeder" badges to show verification details.
+- [ ] **Marketplace Puppy Favorites**: Add a heart/favorite toggle on puppy cards to save listings dynamically.
+- [ ] **Marketplace Contact Seller Flow**: Connect the contact seller button to open direct messaging or the breeder profile contact card.
+- [ ] **Discover Breed Directory Selection**: Enable search/selection of multiple breeds dynamically instead of just Labrador Retriever.
+- [ ] **Discover Breed Page Lightbox**: Add a click-to-zoom lightbox/carousel modal for the breed gallery images.
+
 
