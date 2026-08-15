@@ -1,6 +1,7 @@
 import { v2 as Clodinary } from "cloudinary"
 import fs from 'fs';
-
+import dotenv from "dotenv";
+dotenv.config();
 
 Clodinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -18,7 +19,10 @@ const uploadOnCloudinary = async (localFilePath) => {
         })
         return response;
     } catch (error) {
-        fs.unlinkSync(localFilePath);
+        console.error("Cloudinary Upload Error:", error);
+        if (fs.existsSync(localFilePath)) {
+            fs.unlinkSync(localFilePath);
+        }
         return null;
     }
 }

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useAuth } from "@/app/Context/AuthContext";
 import { useRouter } from 'next/navigation';
@@ -24,6 +24,10 @@ export default function SettingsPage() {
     const [isSaving, setIsSaving] = useState(false);
     const [saveText, setSaveText] = useState('Save Profile');
     const [error, setError] = useState("");
+
+    // Image Upload State
+    const fileInputRef = useRef(null);
+    const [isUploading, setIsUploading] = useState(false);
 
     // Populate form fields when user data loads from context
     useEffect(() => {
@@ -77,6 +81,11 @@ export default function SettingsPage() {
             });
 
             if (!res.ok) {
+                if (res.status === 401) {
+                    logout();
+                    router.push('/Login');
+                    throw new Error("Session expired. Please log in again.");
+                }
                 const data = await res.json();
                 throw new Error(data.message || "Failed to save");
             }
@@ -93,6 +102,45 @@ export default function SettingsPage() {
             setSaveText('Save Profile');
         } finally {
             setIsSaving(false);
+        }
+    };
+
+    const handleImageUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        setIsUploading(true);
+        const token = localStorage.getItem("token");
+        const formData = new FormData();
+        formData.append("profileImage", file);
+
+        try {
+            const res = await fetch("http://localhost:8000/api/profile/upload", {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                body: formData,
+            });
+
+            if (!res.ok) {
+                if (res.status === 401) {
+                    logout();
+                    router.push('/Login');
+                    throw new Error("Session expired. Please log in again.");
+                }
+                const data = await res.json();
+                throw new Error(data.message || "Failed to upload image");
+            }
+
+            // Refresh user to get the new profile picture URL
+            await refreshUser();
+        } catch (err) {
+            alert(err.message || "Something went wrong uploading the image");
+        } finally {
+            setIsUploading(false);
+            // reset file input
+            if (fileInputRef.current) fileInputRef.current.value = "";
         }
     };
 
@@ -167,14 +215,31 @@ export default function SettingsPage() {
                             <div className="flex flex-col md:flex-row gap-8">
                                 <div className="flex flex-col items-center gap-3 shrink-0">
                                     <div className="relative group">
-                                        <div className="w-28 h-28 rounded-full border-4 border-violet-100 bg-violet-200 flex items-center justify-center text-4xl font-bold text-[#4F378A] shadow-sm" style={{ fontFamily: 'Outfit, sans-serif' }}>
-                                            {user?.name?.[0]?.toUpperCase() || "U"}
+                                        <div className="w-28 h-28 rounded-full border-4 border-violet-100 bg-violet-200 flex items-center justify-center text-4xl font-bold text-[#4F378A] shadow-sm overflow-hidden" style={{ fontFamily: 'Outfit, sans-serif' }}>
+                                            {user?.profilePhoto ? (
+                                                <img src={user.profilePhoto} alt="Profile" className="w-full h-full object-cover" />
+                                            ) : (
+                                                user?.name?.[0]?.toUpperCase() || "U"
+                                            )}
                                         </div>
-                                        <button className="absolute bottom-0 right-0 bg-[#4F378A] text-white p-2 rounded-full shadow-lg hover:scale-105 transition-transform cursor-pointer">
-                                            <span className="material-symbols-outlined text-sm">edit</span>
+                                        <button 
+                                            onClick={() => fileInputRef.current?.click()} 
+                                            disabled={isUploading}
+                                            className="absolute bottom-0 right-0 bg-[#4F378A] text-white p-2 rounded-full shadow-lg hover:scale-105 transition-transform cursor-pointer disabled:opacity-50"
+                                        >
+                                            <span className="material-symbols-outlined text-sm">{isUploading ? 'hourglass_empty' : 'edit'}</span>
                                         </button>
+                                        <input 
+                                            type="file" 
+                                            ref={fileInputRef} 
+                                            className="hidden" 
+                                            accept="image/*"
+                                            onChange={handleImageUpload} 
+                                        />
                                     </div>
-                                    <span className="text-xs font-semibold text-gray-400">Change Photo</span>
+                                    <span className="text-xs font-semibold text-gray-400">
+                                        {isUploading ? 'Uploading...' : 'Change Photo'}
+                                    </span>
                                 </div>
 
                                 <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-5">
