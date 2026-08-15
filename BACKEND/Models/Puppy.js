@@ -12,5 +12,12 @@ const PuppySchema = new mongoose.Schema({
   initials: String,
   avatarBg: String,
   img: String,
+  description: String,
+  location: String,
+  contactEmail: String,
+  contactPhone: String,
+  adoptionUrl: String,
+  shelterName: String,
+  photos: Array,
 });
 export const Puppy = mongoose.model("Puppy", PuppySchema);

@@ -25,7 +25,6 @@ const PUPPY_LISTINGS = [
     gender: "Male",
     age: "10 weeks",
     price: "$1,800",
-
     breeder: "Sunset Creek Doodles",
     rating: "5.0",
     initials: "SC",
