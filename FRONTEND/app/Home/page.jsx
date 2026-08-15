@@ -5,6 +5,11 @@ import TopNavBar from "../../component/TopNavBar";
 
 export default function Home() {
   const [puppies, setPuppies] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortBy, setSortBy] = useState("AI Match Score");
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+  const [genderFilter, setGenderFilter] = useState("All");
+  const [ageFilter, setAgeFilter] = useState("All");
 
   const fetchPuppies = async () => {
     try {
@@ -27,6 +32,22 @@ export default function Home() {
   useEffect(() => {
     fetchPuppies();
   }, []);
+
+  const filteredPuppies = puppies.filter(puppy => {
+    const matchesSearch = puppy.breed.toLowerCase().includes(searchTerm.toLowerCase()) || puppy.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesGender = genderFilter === "All" || puppy.gender.toLowerCase() === genderFilter.toLowerCase();
+    const matchesAge = ageFilter === "All" || puppy.age.toLowerCase().includes(ageFilter.toLowerCase());
+    return matchesSearch && matchesGender && matchesAge;
+  });
+
+  const sortedPuppies = [...filteredPuppies].sort((a, b) => {
+    if (sortBy === "Price: Low to High") {
+      const priceA = parseFloat(a.price?.replace(/[^0-9.-]+/g, "") || 0);
+      const priceB = parseFloat(b.price?.replace(/[^0-9.-]+/g, "") || 0);
+      return priceA - priceB;
+    }
+    return 0;
+  });
 
   return (
     <div className="bg-[#fdf7ff] text-gray-900 text-base antialiased min-h-screen flex flex-col font-[Inter,sans-serif]">
@@ -55,11 +76,16 @@ export default function Home() {
               </span>
               <input
                 className="w-full pl-10 pr-3 py-2 bg-violet-50 border border-[#cbc4d2] rounded-lg focus:border-[#4f378a] focus:ring-1 focus:ring-[#4f378a] text-base text-gray-900 outline-none transition-all"
-                placeholder="Search breeds..."
+                placeholder="Search breeds or names..."
                 type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-            <button className="bg-[#ece6ee] text-gray-900 px-6 py-2 rounded-lg border border-[#cbc4d2] hover:bg-[#e6e0e9] transition-colors flex items-center gap-1 text-sm font-medium">
+            <button
+              onClick={() => setIsFilterModalOpen(true)}
+              className="bg-[#ece6ee] text-gray-900 px-6 py-2 rounded-lg border border-[#cbc4d2] hover:bg-[#e6e0e9] transition-colors flex items-center gap-1 text-sm font-medium"
+            >
               <span className="material-symbols-outlined text-xl">tune</span>
               Filters
             </button>
@@ -155,10 +181,14 @@ export default function Home() {
 
         {/* ── Puppy Listings Grid ─────────────────────────────────── */}
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-semibold text-gray-900 font-[Outfit,sans-serif]">New Matches</h2>
+          <h2 className="text-2xl font-semibold text-gray-900 font-[Outfit,sans-serif]">Adoptable Pets Available Here</h2>
           <div className="flex items-center gap-3">
             <span className="text-base text-gray-600">Sort by:</span>
-            <select className="bg-transparent border-none text-sm font-semibold text-[#4f378a] focus:ring-0 cursor-pointer p-0 outline-none">
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="bg-transparent border-none text-sm font-semibold text-[#4f378a] focus:ring-0 cursor-pointer p-0 outline-none"
+            >
               <option>AI Match Score</option>
               <option>Distance</option>
               <option>Price: Low to High</option>
@@ -167,7 +197,7 @@ export default function Home() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {puppies.map((puppy) => (
+          {sortedPuppies.map((puppy) => (
             <div
               key={puppy._id}
               className="bg-white rounded-xl shadow-[0px_4px_20px_rgba(31,41,51,0.04),0px_2px_4px_rgba(31,41,51,0.02)] overflow-hidden border border-[#cbc4d2]/20 hover:-translate-y-0.5 hover:shadow-[0px_8px_30px_rgba(31,41,51,0.08)] transition-all duration-300 flex flex-col group"
@@ -182,7 +212,13 @@ export default function Home() {
                 <button className="absolute top-3 right-3 p-1 bg-white/80 backdrop-blur-sm rounded-full text-gray-400 hover:text-[#4f378a] transition-colors">
                   <span className="material-symbols-outlined">favorite</span>
                 </button>
-
+                {/* Location Badge */}
+                {puppy.location && (
+                  <div className="absolute bottom-3 left-3 bg-black/50 backdrop-blur-sm text-white px-2 py-0.5 rounded-full text-xs flex items-center gap-1">
+                    <span className="material-symbols-outlined" style={{ fontSize: "12px" }}>location_on</span>
+                    {puppy.location}
+                  </div>
+                )}
               </div>
 
               {/* Card Body */}
@@ -195,9 +231,15 @@ export default function Home() {
                     {puppy.price}
                   </span>
                 </div>
-                <p className="text-base text-gray-600 mb-3">
+                <p className="text-base text-gray-600 mb-2">
                   {puppy.breed} • {puppy.gender} • {puppy.age}
                 </p>
+                {/* Short Description */}
+                {puppy.description && (
+                  <p className="text-xs text-gray-500 mb-3 line-clamp-2 leading-relaxed">
+                    {puppy.description}
+                  </p>
+                )}
 
                 {/* Breeder Row */}
                 <div className="flex items-center gap-1 mb-6 border-t border-[#cbc4d2]/30 pt-3 mt-auto">
@@ -229,9 +271,34 @@ export default function Home() {
                   </div>
                 </div>
 
-                <button className="w-full bg-[#4f378a] text-white py-2 rounded-lg text-sm font-medium hover:bg-[#6750a4] hover:text-white transition-all">
-                  Contact Seller
-                </button>
+                {/* Contact Buttons — disabled for now */}
+                {/* <div className="flex gap-2">
+                  {puppy.contactPhone && (
+                    <a
+                      href={`tel:${puppy.contactPhone}`}
+                      className="flex-none bg-violet-50 text-[#4f378a] px-3 py-2 rounded-lg text-sm font-medium hover:bg-violet-100 transition-all flex items-center gap-1 border border-[#cbc4d2]/40"
+                    >
+                      <span className="material-symbols-outlined" style={{ fontSize: "16px" }}>call</span>
+                    </a>
+                  )}
+                  {puppy.adoptionUrl ? (
+                    <a
+                      href={puppy.adoptionUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 bg-[#4f378a] text-white py-2 rounded-lg text-sm font-medium hover:bg-[#6750a4] transition-all flex items-center justify-center gap-1"
+                    >
+                      Contact Shelter
+                    </a>
+                  ) : (
+                    <Link
+                      href={`/Breeder/${encodeURIComponent((puppy.breeder || 'shelter').replace(/\s+/g, '-'))}`}
+                      className="flex-1 bg-[#4f378a] text-white py-2 rounded-lg text-sm font-medium hover:bg-[#6750a4] transition-all flex items-center justify-center"
+                    >
+                      Contact Shelter
+                    </Link>
+                  )}
+                </div> */}
               </div>
             </div>
           ))}
@@ -245,6 +312,65 @@ export default function Home() {
         </div>
       </main>
 
+    {/* Filter Modal */}
+      {isFilterModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/40 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl w-full max-w-md overflow-hidden shadow-2xl border border-gray-100 flex flex-col">
+            <div className="p-6 pb-4 border-b border-gray-100 flex items-center justify-between">
+              <h2 className="text-xl font-semibold font-[Outfit,sans-serif] text-gray-900">Filters</h2>
+              <button onClick={() => setIsFilterModalOpen(false)} className="text-gray-400 hover:text-gray-900 transition-colors">
+                <span className="material-symbols-outlined text-2xl">close</span>
+              </button>
+            </div>
+            <div className="p-6 space-y-6 flex-1 overflow-y-auto">
+              {/* Gender */}
+              <div>
+                <label className="text-sm font-semibold text-gray-900 mb-3 block">Gender</label>
+                <div className="flex gap-2">
+                  {["All", "Male", "Female"].map(opt => (
+                    <button
+                      key={opt}
+                      onClick={() => setGenderFilter(opt)}
+                      className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all ${genderFilter === opt ? "bg-[#4f378a] text-white" : "bg-gray-50 text-gray-600 hover:bg-gray-100 border border-gray-200"}`}
+                    >
+                      {opt}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              {/* Age */}
+              <div>
+                <label className="text-sm font-semibold text-gray-900 mb-3 block">Age Range</label>
+                <div className="flex flex-wrap gap-2">
+                  {["All", "8 Weeks", "10 Weeks", "12 Weeks"].map(opt => (
+                    <button
+                      key={opt}
+                      onClick={() => setAgeFilter(opt)}
+                      className={`py-2 px-4 rounded-lg text-sm font-medium transition-all ${ageFilter === opt ? "bg-[#4f378a] text-white" : "bg-gray-50 text-gray-600 hover:bg-gray-100 border border-gray-200"}`}
+                    >
+                      {opt}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div className="p-6 pt-4 border-t border-gray-100 flex items-center justify-between gap-4 bg-gray-50/50">
+              <button 
+                onClick={() => { setGenderFilter("All"); setAgeFilter("All"); }}
+                className="text-sm font-medium text-gray-600 hover:text-gray-900"
+              >
+                Clear all
+              </button>
+              <button 
+                onClick={() => setIsFilterModalOpen(false)}
+                className="bg-[#4f378a] text-white px-8 py-2.5 rounded-lg text-sm font-medium hover:bg-[#6750a4] transition-all shadow-sm"
+              >
+                Show Results
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

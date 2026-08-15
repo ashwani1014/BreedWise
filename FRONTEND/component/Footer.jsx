@@ -7,7 +7,7 @@ export default function Footer() {
       <div className="max-w-[1280px] mx-auto px-[24px] flex flex-col md:flex-row justify-between items-center gap-8">
         <div className="flex flex-col items-center md:items-start gap-4">
           <span className="font-['Outfit'] text-[24px] leading-[32px] font-bold text-[#1d1b20]">Breedwise AI</span>
-          <p className="font-['Inter'] text-[16px] leading-[24px] text-[#494551] text-center md:text-left">© 2024 Breedwise AI. Premium Pet Matching.</p>
+          <p className="font-['Inter'] text-[16px] leading-[24px] text-[#494551] text-center md:text-left">© 2026 Breedwise AI. Premium Pet Matching.</p>
         </div>
         <div className="flex flex-wrap justify-center gap-8">
           <a className="font-['Inter'] text-[14px] leading-[20px] font-medium text-[#494551] hover:text-[#4f378a] transition-colors" href="#">Privacy Policy</a>

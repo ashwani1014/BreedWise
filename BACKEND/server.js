@@ -7,7 +7,7 @@ import cron from "node-cron";
 import router from "./Routes/AuthRoutes.js";
 import homeRoute from "./Routes/HomeRoutes.js";
 import aiRoute from "./Routes/AiRoutes.js";
-
+import profileDPRouter from "./Routes/profileDP.js";
 dotenv.config();
 
 const app = express();
@@ -23,6 +23,9 @@ app.get("/", (req, res) => {
 app.use("/api/ai", aiRoute);
 app.use('/auth', router);
 app.use("/api/home", homeRoute);
+app.use('/api/profile', profileDPRouter);
+
+
 
 const PORT = process.env.Port;
 
@@ -46,4 +49,4 @@ cron.schedule("0 0 */5 * *", async () => {
   }
 });
 
-console.log("⏰ Cron job scheduled: Auto-refresh rescue pets every 5 days");
+console.log("⏰ Cron job scheduled: Auto-refresh rescue pets every 5 days");
