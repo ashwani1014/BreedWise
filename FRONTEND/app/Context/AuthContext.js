@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
             }
 
             try {
-                const res = await fetch("http://localhost:8000/auth/me", {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/auth/me`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -66,7 +66,7 @@ export const AuthProvider = ({ children }) => {
         if (!token) return;
 
         try {
-            const res = await fetch("http://localhost:8000/auth/me", {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/auth/me`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

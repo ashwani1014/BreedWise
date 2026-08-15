@@ -83,7 +83,7 @@ export default function SettingsPage() {
         }
 
         try {
-            const res = await fetch("http://localhost:8000/auth/me", {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/auth/me`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -137,7 +137,7 @@ export default function SettingsPage() {
         formData.append("profileImage", file);
 
         try {
-            const res = await fetch("http://localhost:8000/api/profile/upload", {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/profile/upload`, {
                 method: "POST",
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -182,7 +182,7 @@ export default function SettingsPage() {
         try {
             const token = localStorage.getItem("token");
             const response = await fetch(
-                "http://localhost:8000/api/profile/change-password",
+                `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/profile/change-password`,
                 {
                     method: "PUT",
                     headers: {

@@ -1,6 +1,6 @@
-import { User } from "../Models/User.js";
+import User from "../Models/User.js";
 import bcrypt from "bcrypt";
-import jwt from"jsonwebtoken";
+import jwt from "jsonwebtoken";
 
 
 export const signup = async (req, res) => {
@@ -95,17 +95,19 @@ export const login = async (req, res) => {
       }
     );
 
+    // Password hata kar baki pura data send karo
+    const userData = user.toObject();
+    delete userData.password;
+
     res.status(200).json({
       success: true,
       message: "Login successful",
       token,
-      email: user.email,
-      name: user.name,
+      user: userData,
     });
 
   } catch (err) {
     console.log(err);
-
     res.status(500).json({
       success: false,
       message: "Internal Server Error",
@@ -134,7 +136,7 @@ export const updateUserProfile = async (req, res) => {
       user.name = req.body.name || user.name;
       user.location = req.body.location || user.location;
       user.bio = req.body.bio || user.bio;
-      
+
       if (req.body.password) {
         user.password = await bcrypt.hash(req.body.password, 10);
       }
@@ -147,7 +149,7 @@ export const updateUserProfile = async (req, res) => {
       }
 
       const updatedUser = await user.save();
-      
+
       // Don't send password back
       const userResponse = updatedUser.toObject();
       delete userResponse.password;

@@ -3,18 +3,18 @@ import mongoose, { Schema } from "mongoose";
 const UserSchema = new mongoose.Schema({
   name: {
     type: String,
-    required:true,
+    required: true,
   },
 
   email: {
     type: String,
     unique: true,
-     required:true,
+    required: true,
   },
 
   password: {
     type: String,
-    required:true,
+    required: true,
   },
   location: {
     type: String,
@@ -34,7 +34,13 @@ const UserSchema = new mongoose.Schema({
     newsletter: { type: Boolean, default: false },
     smsAlerts: { type: Boolean, default: false },
     twoFactorEnabled: { type: Boolean, default: false },
+  },
+  passwordChangedAt: {
+    type: Date,
+    default: null,
   }
 }, { timestamps: true });
 
-export const User = mongoose.model("User", UserSchema);
+const User = mongoose.model("User", UserSchema);
+
+export default User;

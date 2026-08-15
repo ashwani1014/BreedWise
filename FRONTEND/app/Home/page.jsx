@@ -15,7 +15,7 @@ export default function Home() {
     try {
 
       const response = await fetch(
-        "http://localhost:8000/api/home"
+        `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/home`
       );
 
       const data = await response.json();
