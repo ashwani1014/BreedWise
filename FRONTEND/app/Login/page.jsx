@@ -69,7 +69,7 @@ export default function Login() {
       if (data.success) {
         login({
           token: data.token,
-          user: { name: data.name }
+          user: data.user
         });
 
         router.push("/Home");

@@ -250,9 +250,9 @@ export default function Home() {
                   </div>
                   <div className="flex-1">
                     <p className="text-sm font-medium text-gray-900 truncate">
-                      <Link href={`/Breeder/${encodeURIComponent(puppy.breeder.replace(/\s+/g, '-'))}`} className="hover:underline hover:text-[#4f378a] transition-all">
-                        {puppy.breeder}
-                      </Link>
+                        <span className="text-gray-700">
+                          {puppy.breeder}
+                        </span>
                     </p>
                     <div className="flex items-center text-amber-500">
                       <span

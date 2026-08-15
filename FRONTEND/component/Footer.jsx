@@ -10,10 +10,10 @@ export default function Footer() {
           <p className="font-['Inter'] text-[16px] leading-[24px] text-[#494551] text-center md:text-left">© 2026 Breedwise AI. Premium Pet Matching.</p>
         </div>
         <div className="flex flex-wrap justify-center gap-8">
-          <a className="font-['Inter'] text-[14px] leading-[20px] font-medium text-[#494551] hover:text-[#4f378a] transition-colors" href="#">Privacy Policy</a>
-          <a className="font-['Inter'] text-[14px] leading-[20px] font-medium text-[#494551] hover:text-[#4f378a] transition-colors" href="#">Terms of Service</a>
-          <a className="font-['Inter'] text-[14px] leading-[20px] font-medium text-[#494551] hover:text-[#4f378a] transition-colors" href="#">Breeder Verification</a>
-          <a className="font-['Inter'] text-[14px] leading-[20px] font-medium text-[#494551] hover:text-[#4f378a] transition-colors" href="#">Contact Support</a>
+          <Link href="/PrivacyPolicy" className="font-['Inter'] text-[14px] leading-[20px] font-medium text-[#494551] hover:text-[#4f378a] transition-colors">Privacy Policy</Link>
+          <Link href="/TermsOfService" className="font-['Inter'] text-[14px] leading-[20px] font-medium text-[#494551] hover:text-[#4f378a] transition-colors">Terms of Service</Link>
+          <Link href="#" className="font-['Inter'] text-[14px] leading-[20px] font-medium text-[#494551] hover:text-[#4f378a] transition-colors">Breeder Verification</Link>
+          <Link href="/Support" className="font-['Inter'] text-[14px] leading-[20px] font-medium text-[#494551] hover:text-[#4f378a] transition-colors">Contact Support</Link>
         </div>
         <div className="flex gap-4">
           <div className="w-10 h-10 rounded-full bg-[#f2ecf4] flex items-center justify-center text-[#494551] hover:text-[#4f378a] transition-colors cursor-pointer">
