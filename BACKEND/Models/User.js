@@ -38,6 +38,28 @@ const UserSchema = new mongoose.Schema({
   passwordChangedAt: {
     type: Date,
     default: null,
+  },
+  // Payment and subscription tracking
+  requestCount: {
+    type: Number,
+    default: 0,
+  },
+  subscriptionStatus: {
+    type: String,
+    enum: ['free', 'active', 'expired'],
+    default: 'free',
+  },
+  subscriptionExpiry: {
+    type: Date,
+    default: null,
+  },
+  lastPaymentDate: {
+    type: Date,
+    default: null,
+  },
+  remainingRequests: {
+    type: Number,
+    default: 5,
   }
 }, { timestamps: true });
 

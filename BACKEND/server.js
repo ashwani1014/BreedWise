@@ -9,6 +9,7 @@ import router from "./Routes/AuthRoutes.js";
 import homeRoute from "./Routes/HomeRoutes.js";
 import aiRoute from "./Routes/AiRoutes.js";
 import profileDPRouter from "./Routes/profileDP.js";
+import paymentRoute from "./Routes/PaymentRoutes.js";
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.use("/api/ai", aiRoute);
 app.use('/auth', router);
 app.use("/api/home", homeRoute);
 app.use('/api/profile', profileDPRouter);
+app.use('/api/payment', paymentRoute);
 
 
 

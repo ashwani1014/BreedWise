@@ -1,7 +1,53 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import User from "../Models/User.js";
 
 export const getDogMatch = async (req, res) => {
     try {
+        // Check if user is authenticated
+        if (!req.user) {
+            return res.status(401).json({ 
+                success: false, 
+                message: "Authentication required",
+                requiresPayment: false 
+            });
+        }
+
+        const userId = req.user._id;
+        const user = await User.findById(userId);
+
+        // Check subscription status and request limits
+        const now = new Date();
+        let hasAccess = false;
+        let requiresPayment = false;
+
+        if (user.subscriptionStatus === "active" && user.subscriptionExpiry && now <= user.subscriptionExpiry) {
+            // Active subscription - check remaining requests
+            if (user.remainingRequests > 0) {
+                hasAccess = true;
+            } else {
+                requiresPayment = true;
+            }
+        } else {
+            // Free tier or expired subscription - check if under 5 requests
+            if (user.requestCount < 5) {
+                hasAccess = true;
+            } else {
+                requiresPayment = true;
+            }
+        }
+
+        if (!hasAccess) {
+            return res.status(403).json({ 
+                success: false, 
+                message: requiresPayment 
+                    ? "You've used your free requests. Please upgrade to continue." 
+                    : "No requests remaining. Please renew your subscription.",
+                requiresPayment: true,
+                remainingRequests: user.remainingRequests,
+                requestCount: user.requestCount,
+                subscriptionStatus: user.subscriptionStatus
+            });
+        }
         // 1. Gemini API ko yahan initialize kar rahe hain
         const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
         const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
@@ -33,6 +79,15 @@ export const getDogMatch = async (req, res) => {
         aiText = aiText.replace(/```json/g, "").replace(/```/g, "").trim(); // Formatting fix
 
         const matches = JSON.parse(aiText);
+        
+        // Increment request count
+        if (user.subscriptionStatus === "active") {
+            user.remainingRequests -= 1;
+        } else {
+            user.requestCount += 1;
+        }
+        await user.save();
+        
         res.status(200).json({ success: true, matches });
 
     } catch (error) {
