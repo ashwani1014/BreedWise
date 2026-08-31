@@ -1,6 +1,10 @@
 "use client";
 import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '../Context/AuthContext';
+import PaymentModal from '../../component/PaymentModal';
+import SubscriptionStatus from '../../component/SubscriptionStatus';
+import { refreshUser } from '../Context/AuthContext';
 
 import Link from 'next/link';
 
@@ -937,6 +941,10 @@ export default function QuizPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
   const hasFetched = useRef(false);
+  const { user } = useAuth();
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [paymentRequired, setPaymentRequired] = useState(false);
+  const [paymentMessage, setPaymentMessage] = useState('');
 
   const handleNext = (stepData) => {
     setAnswers(prev => ({ ...prev, ...stepData }));
@@ -947,13 +955,28 @@ export default function QuizPage() {
     setCurrentStep(prev => prev - 1);
   };
 
+  const handlePaymentSuccess = async (data) => {
+    setPaymentRequired(false);
+    setShowPaymentModal(false);
+    // Refresh user data to get updated subscription status
+    window.location.reload();
+  };
+
+  const handleOpenPaymentModal = () => {
+    setShowPaymentModal(true);
+  };
+
   const fetchMatches = async () => {
     setHasError(false);
     setIsLoading(true);
     try {
+      const token = localStorage.getItem('token');
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/ai/match`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': token ? `Bearer ${token}` : ''
+        },
         body: JSON.stringify(answers)
       });
 
@@ -961,17 +984,20 @@ export default function QuizPage() {
       if (data.success) {
         localStorage.setItem('aiMatches', JSON.stringify(data.matches));
         router.push('/AIMatch');
+      } else if (data.requiresPayment) {
+        setPaymentRequired(true);
+        setPaymentMessage(data.message);
+        setIsLoading(false);
+        hasFetched.current = false;
       } else {
-        console.error('Failed to get matches');
         setHasError(true);
         setIsLoading(false);
-        hasFetched.current = false; // Allow retrying
+        hasFetched.current = false;
       }
     } catch (error) {
-      console.error('Error fetching matches:', error);
       setHasError(true);
       setIsLoading(false);
-      hasFetched.current = false; // Allow retrying
+      hasFetched.current = false;
     }
   };
 
@@ -985,6 +1011,7 @@ export default function QuizPage() {
 
   return (
     <div className="bg-slate-50 min-h-screen flex flex-col text-gray-900" style={{ fontFamily: 'Inter, sans-serif' }}>
+      {user && <SubscriptionStatus />}
       {currentStep === 1 && <Step1 onNext={handleNext} />}
       {currentStep === 2 && <Step2 onPrev={handlePrev} onNext={handleNext} />}
       {currentStep === 3 && <Step3 onPrev={handlePrev} onNext={handleNext} />}
@@ -993,13 +1020,32 @@ export default function QuizPage() {
       {currentStep === 6 && <Step6 onPrev={handlePrev} onNext={handleNext} />}
       {currentStep > 6 && (
         <main className="flex-grow pt-32 pb-40 flex flex-col items-center justify-center text-gray-500">
-          {!hasError ? (
+          {!hasError && !paymentRequired ? (
             <>
               <div className="w-16 h-16 border-4 border-[#4F378A] border-t-transparent rounded-full animate-spin mb-4"></div>
               <p className="text-2xl font-bold text-[#4F378A]" style={{ fontFamily: 'Outfit, sans-serif' }}>
                 Breedwise AI is analyzing...
               </p>
               <p className="text-md mt-2 text-gray-500 font-medium">Finding the perfect companions from 250+ breeds</p>
+            </>
+          ) : paymentRequired ? (
+            <>
+              <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mb-4">
+                <span className="material-symbols-outlined text-orange-500 text-4xl">payments</span>
+              </div>
+              <p className="text-2xl font-bold text-gray-900 mb-2" style={{ fontFamily: 'Outfit, sans-serif' }}>
+                Payment Required
+              </p>
+              <p className="text-md mt-2 text-gray-500 font-medium mb-6 max-w-md text-center">
+                {paymentMessage}
+              </p>
+              <button
+                onClick={handleOpenPaymentModal}
+                className="bg-[#4F378A] text-white px-8 py-3 rounded-full text-sm font-bold shadow-lg hover:-translate-y-0.5 transition-all flex items-center gap-2"
+              >
+                <span className="material-symbols-outlined">payment</span>
+                Upgrade Now - ₹20
+              </button>
             </>
           ) : (
             <>
@@ -1009,7 +1055,10 @@ export default function QuizPage() {
               </p>
               <p className="text-md mt-2 text-gray-500 font-medium">Please wait a few seconds and try again.</p>
               <button
-                onClick={fetchMatches}
+                onClick={() => {
+                  setHasError(false);
+                  hasFetched.current = false;
+                }}
                 className="mt-6 bg-[#4F378A] text-white px-8 py-3 rounded-full text-sm font-bold shadow-lg hover:-translate-y-0.5 transition-all"
               >
                 Try Again
@@ -1018,6 +1067,11 @@ export default function QuizPage() {
           )}
         </main>
       )}
+      <PaymentModal 
+        isOpen={showPaymentModal} 
+        onClose={() => setShowPaymentModal(false)} 
+        onSuccess={handlePaymentSuccess}
+      />
     </div>
   );
 }
