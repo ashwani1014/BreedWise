@@ -1,5 +1,4 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import User from "../Models/User.js";
 
 export const getDogMatch = async (req, res) => {
     try {
@@ -12,8 +11,8 @@ export const getDogMatch = async (req, res) => {
             });
         }
 
-        const userId = req.user._id;
-        const user = await User.findById(userId);
+        // Use user data from auth middleware instead of fetching again
+        const user = req.user;
 
         // Check subscription status and request limits
         const now = new Date();
@@ -50,7 +49,7 @@ export const getDogMatch = async (req, res) => {
         }
         // 1. Gemini API ko yahan initialize kar rahe hain
         const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-        const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
+        const model = genAI.getGenerativeModel({ model: "gemini-3.6-flash" });
 
         const answers = req.body;
 
@@ -72,6 +71,7 @@ export const getDogMatch = async (req, res) => {
     `;
 
         // 2. AI se response le rahe hain (Stable SDK use kar rahe hain ab)
+
         const result = await model.generateContent(prompt);
         const response = await result.response;
         let aiText = response.text();
@@ -91,39 +91,14 @@ export const getDogMatch = async (req, res) => {
         res.status(200).json({ success: true, matches });
 
     } catch (error) {
-        console.error("AI Match Error, using fallback data:", error.message);
-
-        // 3. Agar Google API fail ho jaye, toh hum ek dummy data bhej denge
-        const fallbackMatches = [
-            {
-                name: "Golden Retriever (Fallback Match)",
-                matchPercentage: 92,
-                description: "The world's most beloved companion. Patient, intelligent, and remarkably versatile.",
-                traits: ["Loyal", "Friendly", "Playful"],
-                energyLevel: "High",
-                monthlyCost: "₹12000 - ₹15000",
-                imageUrl: "https://loremflickr.com/800/600/dog,goldenretriever"
-            },
-            {
-                name: "Beagle (Fallback Match)",
-                matchPercentage: 88,
-                description: "Excellent family dogs known for their incredible sense of smell and merry disposition.",
-                traits: ["Curious", "Merry", "Compact"],
-                energyLevel: "Medium",
-                monthlyCost: "₹8000 - ₹10000",
-                imageUrl: "https://loremflickr.com/800/600/dog,beagle"
-            },
-            {
-                name: "French Bulldog (Fallback Match)",
-                matchPercentage: 85,
-                description: "A small, muscular dog with a smooth coat, flat face and trademark 'bat' ears.",
-                traits: ["Adaptable", "Playful", "Smart"],
-                energyLevel: "Low",
-                monthlyCost: "₹15000 - ₹20000",
-                imageUrl: "https://loremflickr.com/800/600/dog,frenchbulldog"
-            }
-        ];
-
-        res.status(200).json({ success: true, matches: fallbackMatches });
+        console.error("AI Match Error:", error.message);
+        console.error("Full error details:", error);
+        res.status(500).json({ 
+            success: false, 
+            message: "AI service temporarily unavailable. Please try again later.",
+            error: error.message,
+            details: process.env.NODE_ENV === 'development' ? error.stack : undefined
+        });
     }
+
 };
