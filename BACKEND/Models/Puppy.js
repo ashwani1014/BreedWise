@@ -19,5 +19,13 @@ const PuppySchema = new mongoose.Schema({
   adoptionUrl: String,
   shelterName: String,
   photos: Array,
-});
+}, { timestamps: true });
+
+// Add indexes for performance
+PuppySchema.index({ breed: 1 });
+PuppySchema.index({ location: 1 });
+PuppySchema.index({ price: 1 });
+PuppySchema.index({ breeder: 1 });
+PuppySchema.index({ createdAt: -1 }); // For sorting by newest
+
 export const Puppy = mongoose.model("Puppy", PuppySchema);
