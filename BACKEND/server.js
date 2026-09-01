@@ -13,14 +13,7 @@ import paymentRoute from "./Routes/PaymentRoutes.js";
 
 const app = express();
 
-app.use(cors({
-  origin: [
-    'http://localhost:3000',
-    'http://127.0.0.1:3000',
-    'https://breedwise.vercel.app'
-  ],
-  credentials: true
-}));
+app.use(cors());
 app.use(bodyParse.json());
 app.use(express.json());
 
