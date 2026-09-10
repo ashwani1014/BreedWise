@@ -44,9 +44,10 @@ export const signup = async (req, res) => {
       email: newUser.email,
     });
   } catch (err) {
+    console.error("Signup error:", err.message);
     res.status(500).json({
       success: false,
-      message: "Internal Server Error",
+      message: "Server Error",
     });
   }
 };
@@ -107,10 +108,10 @@ export const login = async (req, res) => {
     });
 
   } catch (err) {
-    console.log(err);
+    console.error("Login error:", err.message);
     res.status(500).json({
       success: false,
-      message: "Internal Server Error",
+      message: "Server Error",
     });
   }
 };
@@ -124,7 +125,8 @@ export const getUserProfile = async (req, res) => {
       res.status(404).json({ success: false, message: "User not found" });
     }
   } catch (error) {
-    res.status(500).json({ success: false, message: "Internal Server Error" });
+    console.error("Get profile error:", error.message);
+    res.status(500).json({ success: false, message: "Server Error" });
   }
 };
 
@@ -159,6 +161,7 @@ export const updateUserProfile = async (req, res) => {
       res.status(404).json({ success: false, message: "User not found" });
     }
   } catch (error) {
-    res.status(500).json({ success: false, message: "Internal Server Error" });
+    console.error("Update profile error:", error.message);
+    res.status(500).json({ success: false, message: "Server Error" });
   }
 };
