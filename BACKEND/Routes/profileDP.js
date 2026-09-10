@@ -54,14 +54,14 @@ router.post("/upload", protect, upload.single("profileImage"), async (req, res) 
         });
 
     } catch (error) {
-        console.error("Error in profile picture upload:", error);
+        console.error("Error in profile picture upload:", error.message);
 
         // Ensure local file is deleted if something goes wrong
         if (req.file && fs.existsSync(req.file.path)) {
             fs.unlinkSync(req.file.path);
         }
 
-        res.status(500).json({ message: "Internal server error" });
+        res.status(500).json({ message: "Server Error" });
     }
 });
 
