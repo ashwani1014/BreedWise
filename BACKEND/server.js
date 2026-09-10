@@ -27,6 +27,17 @@ app.use("/api/home", homeRoute);
 app.use('/api/profile', profileDPRouter);
 app.use('/api/payment', paymentRoute);
 
+// 404 handler - must be after all routes
+app.use((req, res) => {
+  res.status(404).json({ message: "Route not found" });
+});
+
+// Global error handler - must be last
+app.use((err, req, res, next) => {
+  console.error("Server Error:", err.message);
+  res.status(500).json({ message: "Server Error" });
+});
+
 
 
 const PORT = process.env.Port;
