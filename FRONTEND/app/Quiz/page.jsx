@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from 'react';
-import { useRouter } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import { useAuth } from '../Context/AuthContext';
 import PaymentModal from '../../component/PaymentModal';
 import SubscriptionStatus from '../../component/SubscriptionStatus';
@@ -973,7 +973,7 @@ export default function QuizPage() {
       const token = localStorage.getItem('token');
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/ai/match`, {
         method: 'POST',
-        headers: { 
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': token ? `Bearer ${token}` : ''
         },
@@ -1049,15 +1049,14 @@ export default function QuizPage() {
             </>
           ) : (
             <>
-              <span className="material-symbols-outlined text-red-500 text-5xl mb-4">error</span>
+              {/* <span className="material-symbols-outlined text-red-500 text-5xl mb-4">error</span> */}
               <p className="text-2xl font-bold text-red-500" style={{ fontFamily: 'Outfit, sans-serif' }}>
-                Oops! Something went wrong.
+                Server Error . Try Again!
               </p>
               <p className="text-md mt-2 text-gray-500 font-medium">Please wait a few seconds and try again.</p>
               <button
                 onClick={() => {
-                  setHasError(false);
-                  hasFetched.current = false;
+                  router.refresh();
                 }}
                 className="mt-6 bg-[#4F378A] text-white px-8 py-3 rounded-full text-sm font-bold shadow-lg hover:-translate-y-0.5 transition-all"
               >
@@ -1067,9 +1066,9 @@ export default function QuizPage() {
           )}
         </main>
       )}
-      <PaymentModal 
-        isOpen={showPaymentModal} 
-        onClose={() => setShowPaymentModal(false)} 
+      <PaymentModal
+        isOpen={showPaymentModal}
+        onClose={() => setShowPaymentModal(false)}
         onSuccess={handlePaymentSuccess}
       />
     </div>
