@@ -46,10 +46,10 @@ export const changePassword = async (req, res) => {
         });
 
     } catch (error) {
-        console.log(error);
+        console.error("Password change error:", error.message);
 
         return res.status(500).json({
-            message: "Server error"
+            message: "Server Error"
         });
     }
 };
