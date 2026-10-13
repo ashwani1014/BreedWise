@@ -10,22 +10,25 @@ export default function AIMatchPage() {
     // 1. LocalStorage se AI ke matches nikalna
     const savedMatches = localStorage.getItem('aiMatches');
     if (savedMatches) {
-      setMatches(JSON.parse(savedMatches));
+      const parsed = JSON.parse(savedMatches);
+      // Handle if data is an object with matches key or directly an array
+      const matchesArray = Array.isArray(parsed) ? parsed : (parsed.matches || []);
+      setMatches(matchesArray);
     }
   }, []);
 
+  // AI ne 3 dogs diye honge. Pehla wala Top Match banayenge, baaki dono ko neeche.
+  const topMatch = Array.isArray(matches) && matches.length > 0 ? matches[0] : null;
+  const secondaryMatches = Array.isArray(matches) && matches.length > 1 ? matches.slice(1) : [];
+
   // Jab tak matches load nahi hote tab tak loading dikhayenge
-  if (matches.length === 0) {
+  if (!topMatch || matches.length === 0) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#fdf7ff] font-['Inter']">
         <p className="text-xl font-semibold text-[#4f378a]">Loading your matches...</p>
       </div>
     );
   }
-
-  // AI ne 3 dogs diye honge. Pehla wala Top Match banayenge, baaki dono ko neeche.
-  const topMatch = matches[0];
-  const secondaryMatches = matches.slice(1);
 
   return (
     <div className="bg-[#fdf7ff] text-[#1d1b20] min-h-screen flex flex-col font-['Inter']">
@@ -104,7 +107,7 @@ export default function AIMatchPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[24px]">
-              {secondaryMatches.map((match, index) => (
+              {secondaryMatches.length > 0 && secondaryMatches.map((match, index) => (
                 <div key={index} className="bg-[#fdf7ff] shadow-[0px_4px_20px_rgba(31,41,51,0.04),0px_2px_4px_rgba(31,41,51,0.02)] rounded-2xl overflow-hidden group hover:shadow-[0px_10px_30px_rgba(31,41,51,0.08),0px_4px_8px_rgba(31,41,51,0.04)] hover:-translate-y-1 transition-all duration-300 flex flex-col">
                   <div className="h-64 relative overflow-hidden">
                     <img className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt={match.name} src={match.imageUrl || (index === 0 ? "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?q=80&w=800&auto=format&fit=crop" : "https://images.unsplash.com/photo-1537151608804-ea6f11788ce7?q=80&w=800&auto=format&fit=crop")} />
@@ -132,7 +135,8 @@ export default function AIMatchPage() {
                 </div>
               ))}
 
-              {/* Recommendation Card 3 (Bento-style Action) */}
+              {/* Recommendation Card 3 (Bento-style Action) - Only show if less than 2 secondary matches */}
+              {secondaryMatches.length < 2 && (
               <div className="bg-[#6750a4] rounded-2xl p-8 flex flex-col justify-center text-[#e0d2ff] group relative overflow-hidden">
                 <div className="relative z-10">
                   <h3 className="font-['Outfit'] text-[32px] leading-[40px] font-semibold mb-4 text-white">Not feeling these?</h3>
@@ -148,6 +152,7 @@ export default function AIMatchPage() {
                 <div className="absolute -bottom-10 -right-10 w-48 h-48 bg-white/10 rounded-full blur-2xl"></div>
                 <div className="absolute top-10 -left-10 w-32 h-32 bg-[#e0d2ff]/5 rounded-full"></div>
               </div>
+              )}
             </div>
           </div>
         </section>
